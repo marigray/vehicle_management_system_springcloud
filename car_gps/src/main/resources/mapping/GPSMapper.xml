@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dra.gps.mapper.GPSMapper">
+    <insert id="add">
+        insert into gps(gps_id, gps_name, gps_type) values (#{gpsId},#{gpsName},#{gpsType})
+    </insert>
+    <update id="update">
+        update gps
+        <set>
+            <if test="gpsName!=null&amp;&amp;gpsName!=''">
+                gps_name=#{gpsName},
+            </if>
+            <if test="gpsType!=null&amp;&amp;gpsType!=''">
+                gps_type=#{gpsType},
+            </if>
+        </set>
+        where gps_id = #{gpsId}
+    </update>
+    <delete id="delete">
+        delete from gps where gps_id = #{gpsId}
+    </delete>
+    <select id="search" resultType="Gps">
+        select gps_id gpsId, gps_name gpsName, gps_type gpsType from gps
+        <where>
+            <if test="gpsId!=null&amp;&amp;gpsId!=''">
+                gps_id = #{gpsId}
+            </if>
+        </where>
+    </select>
+    <select id="searchCarByGpsId" resultType="Car">
+        select c.car_id carId, c.car_num carNum
+        from car_gps cg, car c
+        where  c.car_id = cg.car_id and cg.gps_id = #{gpsId}
+    </select>
+</mapper>

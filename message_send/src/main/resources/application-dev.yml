@@ -1,0 +1,45 @@
+server:
+  port: 12002
+mybatis:
+  mapper-locations: classpath:mappers/*Mapper.xml
+  type-aliases-package: com.dra.pojo.msg
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  configuration:
+    log-impl:
+      pagehelper: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    learning: info
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+spring:
+  application:
+    name: message-send
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dra?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    maxTotal: 1000
+    database: 15
+    host: hadoop100
+    port: 6379
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+
+mymail:
+  senderAddress: GanfanFirst@163.com
+  senderAccount: 查勘车系统服务小组
+  senderPassword: NXCYTGQLQQNQVJDD

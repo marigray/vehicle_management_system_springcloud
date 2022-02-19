@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dra.msg.mapper.PushMailMapper">
+
+    <insert id="addPushMail" useGeneratedKeys="true" keyProperty="id">
+        insert into push_mail
+            (id,mail)
+            value (#{id},#{mail})
+    </insert>
+    <update id="updatePushMail">
+        update push_mail set mail=#{mail} where id = #{id}
+    </update>
+    <delete id="delPushMail">
+        delete from push_mail where id = #{id}
+    </delete>
+    <select id="selectAll" resultType="PushMail">
+        select * from push_mail
+    </select>
+</mapper>

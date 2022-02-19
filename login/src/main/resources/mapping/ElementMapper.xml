@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dra.login.dao.ElementMapper">
+    <insert id="addElement">
+        insert into element(element_id, element_encode)
+        values (#{elementId}, #{elementEncode})
+    </insert>
+    <update id="updateElement">
+        update element
+        set element_encode=#{elementEncode}
+        where element_id = #{elementId}
+    </update>
+    <delete id="deleteElement">
+        delete
+        from element
+        where element_id = #{elementId}
+    </delete>
+
+    <select id="findElement" resultType="Element">
+        select e.element_id elementId, e.element_encode elementEncode
+        from element e,
+             power_element pe
+        where e.element_id = pe.element_id
+          and pe.power_id = #{powerId}
+    </select>
+    <select id="searchElementById" resultType="Element">
+        select element_id elementId, element_encode elementEncode
+        from element
+        where element_id = #{elementId}
+    </select>
+    <select id="searchAllElementByUsername" resultType="Element">
+        select element_id elementId, element_encode elementEncode
+        from element
+    </select>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dra.login.dao.FileMapper">
+    <insert id="addFile">
+        insert into file(file_id, file_name, file_url) values (#{fileId},#{fileName},#{fileUrl})
+    </insert>
+    <update id="updateFile">
+        update file
+        <set>
+            <if test="fileName!=null&amp;&amp;fileName!=''">
+                file_name=#{fileName},
+            </if>
+            <if test="fileUrl!=null&amp;&amp;fileUrl!=''">
+                file_url=#{fileUrl},
+            </if>
+        </set>
+        where file_id=#{fileId}
+    </update>
+    <delete id="deleteFile">
+        delete from file where file_id=#{id}
+    </delete>
+
+
+    <select id="findFile" resultType="File">
+        select f.file_id fileId, f.file_name fileName, f.file_url fileUrl
+        from file f,
+             power_file pf
+        where f.file_id = pf.file_id
+          and pf.power_id = #{powerId}
+    </select>
+    <select id="searchFileById" resultType="File">
+        select file_id fileId, file_name fileName, file_url fileUrl from file where file_id=#{fileId}
+    </select>
+    <select id="searchAllFileByUsername" resultType="File">
+        select file_id fileId, file_name fileName, file_url fileUrl from file
+    </select>
+
+</mapper>

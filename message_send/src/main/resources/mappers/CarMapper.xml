@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dra.msg.mapper.CarMapper">
+
+    <insert id="addCar" parameterType="Car">
+        INSERT INTO car_date (car_id, car_pro_time,last_maintain)
+        VALUES (#{carId}, #{carProTime},#{lastMaintain})
+    </insert>
+    <update id="update">
+        update car_date
+        set last_maintain=#{lastMaintain}
+        where car_id = #{carId}
+    </update>
+    <delete id="delCar">
+        delete
+        from car_date
+        where car_id = #{carId}
+    </delete>
+    <select id="select" resultType="Car">
+        select car_id carId, car_pro_time carProTime, last_maintain lastMaintain
+        from car_date
+        where car_id = #{carId}
+    </select>
+    <select id="selectAll" resultType="Car">
+        select car_id carId, car_pro_time carProTime, last_maintain lastMaintain
+        from car_date
+    </select>
+
+</mapper>

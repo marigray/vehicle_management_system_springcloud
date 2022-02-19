@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<!--    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">-->
+    <title>Title</title>
+    <script src="https://webapi.amap.com/loader.js"></script>
+    <style>
+        #container {width:100%; height: 800px; }
+    </style>
+    <script src="js/data.js"></script>
+</head>
+<body>
+
+<div id="container"></div>
+<script>
+    var x = 116.419401
+    var y = 39.915901
+    var map = null;
+    var marker //标志
+    var ws
+    AMapLoader.load({
+        "key": "dra_gps",              // 申请好的Web端开发者Key，首次调用 load 时必填
+        "version": "1.4.15",   // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+        "plugins": [],           // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+        "AMapUI": {             // 是否加载 AMapUI，缺省不加载
+            "version": '1.1',   // AMapUI 缺省 1.1
+            "plugins":['overlay/SimpleMarker'],       // 需要加载的 AMapUI ui插件
+        },
+        "Loca":{                // 是否加载 Loca， 缺省不加载
+            "version": '1.3.2'  // Loca 版本，缺省 1.3.2
+        },
+    }).then((AMap)=>{
+        map = new AMap.Map('container',{
+            zoom: 13
+        });
+
+        marker = new AMap.Marker({
+            position: new AMap.LngLat(x, y),
+        });
+        map.add(marker)
+        ws = new WebSocket("ws://"+HOST+":"+port[1]+"/car");
+        ws.onopen = onopen
+        ws.onmessage = onmessage
+        ws.onerror = onerror
+    }).catch((e)=>{
+        console.error(e);  //加载错误提示
+    });
+    function f() {
+        map.remove(marker);
+        console.log("set")
+        var po = new AMap.LngLat(x,y)
+
+        // x+=0.0002
+        // y+=0.0002
+        map.setCenter(po)
+        marker = new AMap.Marker({
+            position: po
+        });
+
+        map.add(marker)
+    }
+    function onopen() {
+        //发送鉴权信息 车辆id  举个栗子：id 为 beb2c586-35bc-491c-88d4-d6560c5a8180
+        ws.send("*2d86ed61-cb10-4fb1-b8ae-6c756216a98c*")
+        //接下来可以服务器将会进行位置信息推送 需要去onmessage中获取
+    }
+    function onmessage(msg) {
+        //将json字符串转化为对象
+        let data = JSON.parse(msg.data)
+        //判断是否为上一次相同位置信息 减少图标闪烁
+        if (!(x===data.positionX&&y===data.positionY)) {
+            x = data.positionX
+            y = data.positionY
+            //将信息放入在地图中
+            f()
+        }
+    }
+    function onerror() {
+
+    }
+</script>
+</body>
+</html>

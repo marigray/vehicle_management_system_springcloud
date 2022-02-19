@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dra.login.dao.MenuMapper">
+    <insert id="addMenu">
+        insert into menu(menu_id, menu_name, menu_url, menu_parent_id)
+            value (#{menuId}, #{menuName}, #{menuUrl}, #{menuParentId})
+    </insert>
+    <update id="updateMenu">
+        update menu
+        <set>
+            <if test="menuName!=null&amp;&amp;menuName!=''">
+                menu_name=#{menuName},
+            </if>
+            <if test="menuUrl!=null&amp;&amp;menuUrl!=''">
+                menu_url=#{menuUrl},
+            </if>
+            <if test="menuParentId!=null&amp;&amp;menuParentId!=''">
+                menu_parent_id=#{menuParentId},
+            </if>
+        </set>
+        where menuId=#{menuId}
+    </update>
+    <delete id="deleteMenu">
+        delete
+        from file
+        where file_id = #{fileId}
+    </delete>
+    <select id="searchMenuById" resultType="Menu">
+        select menu_id menuId, menu_name menuName, menu_url menuUrl, menu_parent_id menuParentId
+        from menu
+        where menu_id = #{menuId}
+    </select>
+    <select id="searchAllMenuByUsername" resultType="Menu">
+        select menu_id menuId, menu_name menuName, menu_url menuUrl, menu_parent_id menuParentId
+        from menu
+    </select>
+    <select id="findMenu" resultType="Menu">
+        select m.menu_id menuId, m.menu_name menuName, m.menu_url menuUrl, m.menu_parent_id menuParentId
+        from menu m,
+             power_menu pm
+        where m.menu_id = pm.menu_id
+          and pm.power_id = #{powerId}
+    </select>
+
+
+
+</mapper>

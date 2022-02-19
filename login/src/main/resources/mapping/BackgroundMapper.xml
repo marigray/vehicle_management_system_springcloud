@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dra.login.dao.BackgroundMapper">
+
+    <resultMap id="userMap" type="UserMessage">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <collection property="roles" column="id" select="com.dra.dao.RoleMapper.findRole"/>
+    </resultMap>
+
+
+    <select id="findUser" resultMap="userMap">
+        select b.*
+        from background b
+        where id = #{id}
+    </select>
+
+    <insert id="addBackground">
+        insert into background(id, username, password)
+        values (#{id}, #{username}, #{password})
+    </insert>
+    <update id="updateBackground" parameterType="Background">
+        update background
+        <set>
+            <if test="username!=null&amp;&amp;username!=''">
+                username=#{username},
+            </if>
+            <if test="password!=null&amp;&amp;password!=''">
+                password=#{password},
+            </if>
+            <if test="lastTime!=null">
+                last_time=#{lastTime},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteBackground">
+        delete
+        from background
+        where id = #{id}
+    </delete>
+    <select id="searchBackgroundById" resultType="HashMap">
+        select id, username, password, last_time lastTime
+        from background
+        where id = #{id}
+    </select>
+
+    <select id="searchAllBackgroundByUsername" resultType="HashMap">
+        select id,username,last_time lastTime
+        from background
+
+        <where>
+            <if test="username!=null&amp;&amp;username!=&quot;&quot;">
+                username like concat(#{username},'%')
+            </if>
+        </where>
+
+    </select>
+    <select id="searchBackgroundByUsername" resultType="HashMap">
+        select id, username, password, last_time lastTime
+        from background
+        where username = #{username}
+    </select>
+
+</mapper>

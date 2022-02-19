@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dra.login.dao.PowerAssignmentMapper">
+
+    <insert id="addRoleToUser">
+        insert into user_role(user_id, role_id)
+        values (#{id}, #{roleId})
+    </insert>
+    <insert id="addPowerToRole">
+        insert into role_power(role_id, power_id)
+        values (#{roleId}, #{powerId})
+    </insert>
+    <insert id="addElementToPower">
+        insert into power_element(power_id, element_id)
+        values (#{powerId}, #{elementId})
+    </insert>
+    <insert id="addFileToPower">
+        insert into power_file(power_id, file_id)
+        values (#{powerId}, #{fileId})
+    </insert>
+    <insert id="addMenuToPower">
+        insert into power_menu(power_id, menu_id)
+        values (#{powerId}, #{menuId})
+    </insert>
+
+
+    <delete id="deleteRoleFromUser">
+        delete
+        from user_role
+        where role_id = #{roleId}
+          and user_id = #{id}
+    </delete>
+    <delete id="deletePowerFromRole">
+        delete
+        from role_power
+        where role_id = #{roleId}
+          and power_id = #{powerId}
+    </delete>
+    <delete id="deleteElementFromRole">
+        delete
+        from power_element
+        where element_id = #{elementId}
+          and power_id = #{powerId}
+    </delete>
+    <delete id="deleteFileFromRole">
+        delete
+        from power_file
+        where file_id = #{fileId}
+          and power_id = #{powerId}
+    </delete>
+    <delete id="deleteMenuFromRole">
+        delete
+        from power_menu
+        where menu_id = #{menuId}
+          and power_id = #{powerId}
+    </delete>
+
+
+    <select id="searchRoleByUsername" resultType="HashMap">
+        select r.role_id roleId, r.role_name roleName
+        from user_role ur,
+             role r
+        where r.role_id = ur.role_id
+          and user_id = #{id}
+    </select>
+    <select id="searchPowerByRoleId" resultType="HashMap">
+        select p.power_id powerId, p.power_type powerType
+        from role_power rp,
+             power p
+        where p.power_id = rp.power_id
+          and rp.role_id = #{roleId}
+    </select>
+    <select id="searchElementByPowerId" resultType="HashMap">
+        select e.element_id elementId,e.element_encode elementEncode
+        from power_element pe,
+             element e
+        where e.element_id=pe.element_id and pe.power_id = #{powerId}
+    </select>
+    <select id="searchFileByPowerId" resultType="HashMap">
+        select f.file_id fileId, f.file_name fileName, f.file_url fileUrl
+        from power_file pf,
+             file f
+        where f.file_id=pf.file_id and pf.power_id = #{powerId}
+    </select>
+    <select id="searchMenuByPowerId" resultType="HashMap">
+        select m.menu_id menuId, m.menu_name menuName, m.menu_url menUrl, m.menu_parent_id menuParentId
+        from power_menu pm,
+             menu m
+        where m.menu_id=pm.menu_id and pm.power_id = #{powerId}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dra.login.dao.UserMapper">
+
+    <resultMap id="userMap" type="UserMessage">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <collection property="roles" column="id" select="com.dra.dao.RoleMapper.findRole"/>
+    </resultMap>
+    <update id="updateUser" parameterType="User">
+        update user
+        <set>
+            <if test="username!=null&amp;&amp;username!=''">
+                username=#{username},
+            </if>
+            <if test="password!=null&amp;&amp;username!=''">
+                password=#{password},
+            </if>
+            <if test="lastTime!=null">
+                last_time=#{lastTime},
+            </if>
+            <if test="eMail!=null&amp;&amp;eMail!=''">
+                e_mail=#{eMail},
+            </if>
+            <if test="phoneNum!=null&amp;&amp;phoneNum!=''">
+                phone_num=#{phoneNum},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteUser">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+    <select id="searchUserById" resultType="User">
+        select id,
+               username,
+               name,
+               id_num    idNum,
+               password,
+               last_time lastTime,
+               phone_num PhoneNum,
+               e_mail    eMail
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="findUser" resultMap="userMap">
+        select u.*
+        from user u
+        where id = #{id}
+    </select>
+
+
+    <select id="searchAllUserByUsername" resultType="User">
+        select id, username, name, id_num idNum, password, last_time lastTime, phone_num PhoneNum, e_mail eMail
+        from user
+        <where>
+            <if test="username!=null&amp;&amp;username!=&quot;&quot;">
+                username like concat(#{username},'%')
+            </if>
+        </where>
+
+    </select>
+
+    <select id="searchUserByUsername" resultType="HashMap">
+        select id,
+               username,
+               name,
+               id_num    idNum,
+               password,
+               last_time lastTime,
+               phone_num phoneNum,
+               e_mail    EMail
+        from user
+        where username = #{username}
+    </select>
+    <select id="searchBackgroundByUsername" resultType="HashMap">
+        select id, username, password
+        from background
+        where username = #{username}
+    </select>
+    <select id="searchByUsername" resultType="User">
+        select id,
+               username,
+               name,
+               id_num    idNum,
+               password,
+               last_time lastTime,
+               phone_num phoneNum,
+               e_mail    eMail
+        from user
+        where username = #{username}
+    </select>
+
+
+    <insert id="add">
+        insert into user(id, username, name, id_num, password, last_time, phone_num, e_mail)
+        values (#{id}, #{username}, #{name}, #{idNum}, #{password}, #{lastTime}, #{phoneNum}, #{eMail})
+    </insert>
+    <insert id="addUser">
+        insert into user(id, username, name, id_num, password, last_time, phone_num, e_mail)
+        values (#{id}, #{username}, #{name}, #{idNum}, #{password}, #{lastTime}, #{phoneNum}, #{eMail})
+    </insert>
+
+</mapper>

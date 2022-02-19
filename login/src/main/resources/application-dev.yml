@@ -1,0 +1,47 @@
+server:
+  port: 5557
+spring:
+  application:
+    name: login
+  artemis:
+    mode: native
+    host: 127.0.0.1
+    port: 61616
+    user: dra
+    password: 123
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/login?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  redis:
+    maxTotal: 1000
+    database: 0
+    host: hadoop100
+    port: 6379
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: com.dra.pojo.login
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  configuration:
+    log-impl:
+      pagehelper: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    learning: debug
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka

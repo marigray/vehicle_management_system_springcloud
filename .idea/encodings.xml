@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/api-commons/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-commons/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/car_gps/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/car_gps/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eureka-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eureka-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/login/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/login/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/message_send/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/message_send/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/security-boot-start/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/security-boot-start/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

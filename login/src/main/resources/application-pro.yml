@@ -1,0 +1,40 @@
+my:
+  server:
+    port:
+#      tcp: 6666
+      wsPosition: 7777
+      wsSate: 8888
+server:
+  port: 5555
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-bp129t7yxb1o95tvm2o.mysql.rds.aliyuncs.com:3306/dra?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
+    username: yxydt
+    password: 2545570457@qq
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    maxTotal: 1000
+    database: 0
+    host: car.qzxydragon.top
+    port: 12012
+    password: 2545570457@qq
+    timeout: 3000
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: com.dra.gps.pojo
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  configuration:
+    log-impl:
+      pagehelper: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    learning: info

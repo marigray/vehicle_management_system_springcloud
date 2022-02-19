@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dra.gps.mapper.GPSLogMapper">
+    <insert id="add">
+        insert into gps_log(gps_id, time, position_x, position_y) values(#{gpsId},#{time},#{positionX},#{positionY})
+    </insert>
+
+
+    <select id="search" resultType="GpsLog">
+        select cg.car_id carId, gl.time , gl.position_x positionX, gl.position_y positionY
+        from gps_log gl,car_gps cg
+
+        <where>
+            gl.gps_id=cg.gps_id and cg.car_id=#{carId}
+            <if test="date1!=null&amp;&amp;date2!=null">
+               and time between #{date1} and #{date2}
+            </if>
+        </where>
+
+    </select>
+
+</mapper>

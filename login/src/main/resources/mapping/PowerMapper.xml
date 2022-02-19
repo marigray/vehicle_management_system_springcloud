@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dra.login.dao.PowerMapper">
+    <resultMap id="power" type="Power">
+        <id column="power_id" property="powerId"/>
+        <result column="power_type" property="powerType"/>
+        <collection property="elements" column="power_id" select="com.dra.dao.ElementMapper.findElement"/>
+        <collection property="files" column="power_id" select="com.dra.dao.FileMapper.findFile"/>
+        <collection property="menus" column="power_id" select="com.dra.dao.MenuMapper.findMenu"/>
+    </resultMap>
+
+
+
+    <select id="findPower" resultMap="power">
+        select p.*
+        from power p,
+             role_power rp
+        where p.power_id = rp.power_id
+          and rp.role_id = #{roleId}
+    </select>
+
+
+    <insert id="addPower">
+        insert into power(power_id, power_type)
+        values (#{powerId}, #{powerType})
+    </insert>
+    <update id="updatePower">
+        update power set power_type=#{powerType} where power_id = #{powerId}
+    </update>
+
+    <delete id="deletePower">
+        delete from power where power_id=#{powerId}
+    </delete>
+
+    <select id="searchPowerById" resultType="Power">
+        select power_id powerId, power_type powerType from power where power_id = #{powerId}
+    </select>
+    <select id="searchAllPowerByUsername" resultType="Power">
+        select power_id powerId, power_type powerType from power
+    </select>
+</mapper>

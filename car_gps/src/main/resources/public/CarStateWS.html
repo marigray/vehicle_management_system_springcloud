@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table{
+            position: absolute;
+            text-align: center;
+            top: 300px;
+            width: 800px;
+            left: 20%;
+        }
+    </style>
+    <script src="js/data.js"></script>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <td>车辆id</td>
+        <td>状态</td>
+    </tr>
+    <tr>
+        <td id="carId"></td>
+        <td id="state"></td>
+    </tr>
+</table>
+<script>
+    let test = [{
+      carId : "123123",
+      carNum : "123123",
+      state : ""
+    }]
+    let ws = new WebSocket("ws://"+HOST+":"+port[0]+"/state")
+    let carId = document.getElementById("carId")
+    let state = document.getElementById("state")
+    ws.onopen = function () {
+
+    }
+    ws.onmessage = function (msg) {
+        var data = JSON.parse(msg.data)
+        carId.innerText = data[0].carId
+        state.innerText = data[0].state
+    }
+</script>
+</body>
+</html>

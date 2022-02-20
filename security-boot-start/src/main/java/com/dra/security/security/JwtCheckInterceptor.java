@@ -1,6 +1,7 @@
 package com.dra.security.security;
 
 import com.dra.security.service.CheckTokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -11,6 +12,7 @@ import java.util.Map;
  * 检测Jwt相关是否符合标准
  */
 @Component
+@Slf4j
 public class JwtCheckInterceptor {
 
     @Resource
@@ -20,7 +22,7 @@ public class JwtCheckInterceptor {
 
 
     public String preHandle(Map<String,String> map) throws Exception {
-
+        log.info("进入JwtCheckInterceptor");
         if (Boolean.parseBoolean(map.get("isPublic")))
             return String.valueOf(true);
 

@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Configuration
 @Slf4j
 public class MyMvcConfig implements WebMvcConfigurer {
@@ -26,6 +27,9 @@ public class MyMvcConfig implements WebMvcConfigurer {
     private AuthInterceptor authInterceptor;
 
 
+    /**
+     * 解决跨域
+     */
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
@@ -41,7 +45,9 @@ public class MyMvcConfig implements WebMvcConfigurer {
         return new CorsFilter(corsConfigurationSource);
     }
 
-
+    /**
+     * 解决报错
+     */
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters() {
         // 1.定义一个converters转换消息的对象
@@ -77,7 +83,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
     /**
-     * 配置拦截器
+     * 配置安全框架拦截器
      * @param registry
      */
     @Override

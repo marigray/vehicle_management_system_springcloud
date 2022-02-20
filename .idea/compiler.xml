@@ -8,11 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="api-commons" />
+        <module name="message_send" />
         <module name="security-boot-start" />
         <module name="login" />
         <module name="car_gps" />
         <module name="eureka-server" />
-        <module name="message_send" />
+        <module name="SpringCouldTest" />
       </profile>
     </annotationProcessing>
   </component>

@@ -1,4 +1,4 @@
-package com.dra.login.config;
+package com.dra.gps.config;
 
 import feign.RequestInterceptor;
 import lombok.extern.slf4j.Slf4j;

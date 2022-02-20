@@ -2,6 +2,7 @@ package com.dra.security.security;
 
 import com.dra.security.service.CheckTokenService;
 import com.dra.security.utils.PowerCompare;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,6 +18,7 @@ import java.util.Map;
  * Controller中的方法名称不能重复
  */
 @Component
+@Slf4j
 public class JwtPowerInterceptor {
 
     @Resource
@@ -29,7 +31,7 @@ public class JwtPowerInterceptor {
 
 
     public String preHandle(Map<String, String> map) throws Exception {
-
+        log.info("进入JwtPowerInterceptor");
         if (Boolean.parseBoolean(map.get("isPublic")))
             return String.valueOf(true);
 

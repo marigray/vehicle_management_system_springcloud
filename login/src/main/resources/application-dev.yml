@@ -45,3 +45,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:7001/eureka
+feign:
+  compression:
+    request:
+      min-request-size: 10240

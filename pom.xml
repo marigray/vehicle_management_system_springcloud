@@ -15,6 +15,7 @@
         <module>security-boot-start</module>
         <module>api-commons</module>
         <module>eureka-server</module>
+        <module>SpringCouldTest</module>
     </modules>
 
 

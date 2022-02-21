@@ -13,4 +13,10 @@ public class FormatData<T> implements Serializable {
     private T data;
     private int code;
     private String msg;
+
+    public FormatData(T data){
+        this.data=data;
+        this.code=200;
+        this.msg="success";
+    }
 }

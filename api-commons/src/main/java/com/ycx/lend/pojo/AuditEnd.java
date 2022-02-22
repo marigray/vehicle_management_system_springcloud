@@ -1,5 +1,4 @@
-package com.dra.pojo.lending;
-
+package com.ycx.lend.pojo;
 
 import lombok.Data;
 import lombok.ToString;
@@ -13,17 +12,17 @@ import java.util.Date;
 @Data
 @ToString
 @Entity
-@Table(name = "audit")
-public class Audit implements Serializable {
+@Table(name = "audit_end")
+public class AuditEnd implements Serializable {
     @Id
     private String auditId;
 
-    private String applicationId;
-
     private String auditorId;
 
-    private Integer auditStatus;
+    private String applicationId;
 
-    private Date auditTime;
+    private Integer endStatus;
+
+    private Date endTime;
 
 }

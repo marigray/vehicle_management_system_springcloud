@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ycx.lend.mapper.AuditMapper">
+
+
+    <select id="queryAuditOfAuditor" resultType="hashmap">
+        select a.auditor_id as 'auditorId', count(*) as 'auditCount'
+        from audit
+                 join auditor a on audit.auditor_id = a.auditor_id
+        where a.auditor_type = 0
+        group by a.auditor_id
+    </select>
+
+    <select id="queryAuditByUser" resultType="audit">
+        select audit.*
+        from audit
+                 join auditor a on audit.auditor_id = a.auditor_id
+        where a.user_id = #{userId}
+    </select>
+
+    <select id="queryAuditOfAuditorById" resultType="hashMap">
+        select a.auditor_id as 'auditorId', count(*) as 'auditCount'
+        from audit
+                 join auditor a on audit.auditor_id = a.auditor_id
+        where a.auditor_type = 0
+          and a.auditor_id = #{auditorId}
+        group by a.auditor_id
+    </select>
+
+    <select id="queryAuditorCountById" resultType="hashmap">
+        select application_id as 'applicationId', count(*) as 'applicationCount'
+        from audit
+                 join auditor a on audit.auditor_id = a.auditor_id
+        where a.auditor_type = 0
+          and application_id = #{applicationId}
+        group by audit.application_id
+    </select>
+
+    <select id="queryAuditByAuditor" resultType="audit">
+        select *
+        from audit
+        where auditor_id = #{auditorId}
+    </select>
+
+    <select id="queryPassedCount" resultType="integer">
+        select count(*)
+        from audit
+        where application_id = #{applicationId}
+          and audit_status = 2
+        group by application_id
+    </select>
+
+    <select id="queryNotPassCount" resultType="integer">
+        select count(*)
+        from audit
+        where application_id = #{applicationId}
+          and audit_status = 3
+        group by application_id
+    </select>
+    <select id="getAuditByApplication" resultType="audit">
+        select *
+        from audit
+        where application_id = #{applicationId}
+    </select>
+
+
+</mapper>

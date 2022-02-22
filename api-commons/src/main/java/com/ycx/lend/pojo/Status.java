@@ -1,4 +1,4 @@
-package com.dra.pojo.lending;
+package com.ycx.lend.pojo;
 
 import lombok.Data;
 import lombok.ToString;

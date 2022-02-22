@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ycx.lend.mapper.CarMapper">
+
+    <select id="queryCarByAuditEndId" resultType="car">
+        select car.*
+        from car
+                 join application on application.car_id = car.car_id
+                 join audit_end on audit_end.application_id = application.application_id
+        where audit_end.audit_id=#{auditId}
+    </select>
+</mapper>

@@ -1,21 +1,18 @@
-package com.dra.pojo.lending;
+package com.ycx.lend.pojo;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-/**
- * @Author ycx
- * @Date 2022/1/22 21:01
- * @Description
- */
 @Data
+@ToString
 @Entity
-@Table(name = "car_type")
-public class CarType implements Serializable {
+@Table(name = "application_type")
+public class ApplicationType implements Serializable {
     @Id
     private Integer typeNum;
 

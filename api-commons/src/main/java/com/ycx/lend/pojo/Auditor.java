@@ -1,4 +1,5 @@
-package com.dra.pojo.lending;
+package com.ycx.lend.pojo;
+
 
 import lombok.Data;
 import lombok.ToString;
@@ -11,11 +12,13 @@ import java.io.Serializable;
 @Data
 @ToString
 @Entity
-@Table(name = "application_type")
-public class ApplicationType implements Serializable {
+@Table(name = "auditor")
+public class Auditor implements Serializable {
     @Id
-    private Integer typeNum;
+    private String auditorId;
 
-    private String typeName;
+    private String userId;
+
+    private Integer auditorType;
 
 }

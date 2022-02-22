@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ycx.lend.mapper.AuditEndMapper">
+
+    <select id="queryAuditOfEndAuditor" resultType="hashMap">
+        select a.auditor_id as 'auditorId', count(*) as 'auditCount'
+        from audit
+                 join auditor a on audit.auditor_id = a.auditor_id
+        where a.auditor_type = 1
+        group by a.auditor_id
+    </select>
+</mapper>

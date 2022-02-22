@@ -10,7 +10,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @Description
  */
 @SpringBootApplication
-//@MapperScan(basePackages = {"com.ycx.lend.mapper"})
+@MapperScan(basePackages = {"com.ycx.lend.mapper"})
 public class LendingBoot {
     public static void main(String[] args) {
         SpringApplication.run(LendingBoot.class,args);

@@ -110,6 +110,11 @@
             <artifactId>commons-email</artifactId>
             <version>1.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.best_dry_ice</groupId>
+            <artifactId>api-commons</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

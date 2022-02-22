@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wang.vire.mapper.RepairMapper">
+
+    <select id="queryByCarId" resultType="Repair">
+        select *
+        from repair
+        where car_id=#{carId};
+    </select>
+    <select id="queryByUserId" resultType="Repair">
+        select *
+        from repair
+        where repairer_id=#{repairerId}
+    </select>
+    <select id="queryAllRepair" resultType="Repair">
+        select *
+        from repair
+    </select>
+
+</mapper>

@@ -16,6 +16,7 @@
         <module>api-commons</module>
         <module>eureka-server</module>
         <module>car_lending</module>
+        <module>vire</module>
     </modules>
 
 

@@ -1,0 +1,34 @@
+server:
+  port: 12001
+mybatis:
+  mapper-locations: classpath:mappers/*Mapper.xml
+  type-aliases-package: com.wang.vire.pojo
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  configuration:
+    log-impl:
+      pagehelper: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    learning: info
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/car?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
+    username: root
+    password: wang
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    maxTotal: 1000
+    database: 5
+    host: 121.40.232.160
+    port: 6379
+    password: 110206658q
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8

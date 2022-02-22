@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wang.vire.mapper.RepairApplyMapper">
+    <select id="queryApplyByCarIdAndApplyStatus" resultType="RepairApply">
+        select *
+        from repair_apply
+        where car_id=#{carId} and apply_status=#{applyStatus};
+    </select>
+    <select id="queryAllApply" resultType="RepairApply">
+        select *
+        from repair_apply
+    </select>
+    <select id="queryApplyByUser" resultType="RepairApply">
+        select *
+        from repair_apply
+        where applicant_id=#{applicantId};
+    </select>
+
+    <update id="updateAuditStatus">
+        update repair_apply
+        set apply_status = #{applyStatus}
+        where apply_id=#{applyId};
+    </update>
+
+
+</mapper>

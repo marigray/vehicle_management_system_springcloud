@@ -1,0 +1,38 @@
+server:
+  port: 4444
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-bp129t7yxb1o95tvm2o.mysql.rds.aliyuncs.com:3306/dra?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
+    username: yxydt
+    password: 2545570457@qq
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    maxTotal: 1000
+    host: car.qzxydragon.top
+    port: 12012
+    password: 2545570457@qq
+    timeout: 3000
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+mybatis:
+  mapper-locations: classpath:mappers/*Mapper.xml
+  type-aliases-package: com.dra.msg.pojo
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  configuration:
+    log-impl:
+      pagehelper: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    learning: info
+
+mymail:
+  senderAddress: test_dra@qq.com
+  senderAccount: 查勘车系统服务小组
+  senderPassword: jmpkvjqvesbgeaai

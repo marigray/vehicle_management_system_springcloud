@@ -15,6 +15,8 @@ logging:
   level:
     learning: info
 spring:
+  application:
+    name: vire
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/car?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
@@ -32,3 +34,13 @@ spring:
       enabled: true
       force: true
       charset: UTF-8
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+feign:
+  compression:
+    request:
+      min-request-size: 10240

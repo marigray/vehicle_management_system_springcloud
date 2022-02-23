@@ -1,17 +1,23 @@
 package com.ycx.lend.service.impl;
 
+import com.ycx.lend.exception.ParamException;
 import com.ycx.lend.mapper.*;
 import com.ycx.lend.pojo.Application;
 import com.ycx.lend.pojo.Car;
 import com.ycx.lend.pojo.CarChange;
 import com.ycx.lend.service.CarService;
 import com.ycx.lend.service.CompanyService;
+import com.ycx.lend.service.GPSLogService;
 import com.ycx.lend.utils.EmptyChecker;
 import com.ycx.lend.utils.ServiceUtils;
 import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.awt.*;
 import java.text.ParseException;
 import java.util.Date;
@@ -36,8 +42,11 @@ public class CarServiceImpl implements CarService {
     CarTypeMapper carTypeMapper;
     @Autowired
     ApplicationMapper applicationMapper;
-    @Reference
+    @Autowired
     CompanyService companyService;
+    @Autowired
+    GPSLogService gpsLogService;
+
 
     @Override
     public int updateCar(String carId, Integer carStatus) {
@@ -80,7 +89,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public int returnCar(String userId, String carId, String time) throws ParseException {
+    public int returnCar(String userId, String carId, String time) throws ParseException, ParamException {
         if (EmptyChecker.isAnyOneEmpty(carId, time)) {
             return 0;
         }
@@ -88,6 +97,8 @@ public class CarServiceImpl implements CarService {
         if (EmptyChecker.isEmpty(carMapper.selectByPrimaryKey(carId))) {
             return -2;
         }
+        //转换输入的string类型时间
+        Date date = ServiceUtils.StrToDate(time);
         //查询车辆归还前状态
         Integer carStatus = carMapper.selectByPrimaryKey(carId).getCarStatus();
 
@@ -105,6 +116,9 @@ public class CarServiceImpl implements CarService {
                 //获取公司定位
                 HashMap<String, Double> companyLocation = companyService.getCompanyLocation();
                 //获取汽车定位
+                long LongTime = date.getTime();
+                Object carLocation = gpsLogService.search(carId, LongTime, LongTime, 1, 1);
+                System.out.println(carLocation);
 //                GPSUtils.getDistance(, , companyLocation.get("longitude"), companyLocation.get("latitude"));
                 applicationMapper.updateIfReturn(application.getApplicationId(), 1);
             } else return -6;
@@ -121,7 +135,7 @@ public class CarServiceImpl implements CarService {
         Car car = new Car();
         car.setCarId(carId);
         car.setCarStatus(1);
-        addCarChange(carId, 1, ServiceUtils.StrToDate(time));
+        addCarChange(carId, 1, date);
         return carMapper.updateByPrimaryKeySelective(car);
     }
 

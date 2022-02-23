@@ -15,6 +15,8 @@ logging:
   level:
     learning: debug
 spring:
+  application:
+    name: car-lending
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/survey_car?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
@@ -31,3 +33,9 @@ spring:
       enabled: true
       force: true
       charset: UTF-8
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka

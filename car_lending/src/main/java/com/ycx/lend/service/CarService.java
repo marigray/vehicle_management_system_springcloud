@@ -1,5 +1,6 @@
 package com.ycx.lend.service;
 
+import com.ycx.lend.exception.ParamException;
 import com.ycx.lend.pojo.Car;
 
 import java.text.ParseException;
@@ -20,7 +21,7 @@ public interface CarService {
     int addCarChange(String carId, Integer afterStatus, Date changeTime);
 
     //归还车辆
-    int returnCar(String userId, String carId, String time) throws ParseException;
+    int returnCar(String userId, String carId, String time) throws ParseException, ParamException;
 
     //查询闲置车辆
     List<Car> queryIdleCar();

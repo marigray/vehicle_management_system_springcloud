@@ -1,8 +1,26 @@
 server:
-  port: 8002
+  port: 4444
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-bp129t7yxb1o95tvm2o.mysql.rds.aliyuncs.com:3306/dra?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
+    username: yxydt
+    password: 2545570457@qq
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    maxTotal: 1000
+    host: car.qzxydragon.top
+    port: 12012
+    password: 2545570457@qq
+    timeout: 3000
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml
-  type-aliases-package: com.ycx.lend.pojo
+  type-aliases-package: com.dra.msg.pojo
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
@@ -10,32 +28,11 @@ mybatis:
   configuration:
     log-impl:
       pagehelper: org.apache.ibatis.logging.stdout.StdOutImpl
-    map-underscore-to-camel-case: true
 logging:
   level:
-    learning: debug
-spring:
-  application:
-    name: car-lending
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-bp12gjcylbvar819iao.mysql.rds.aliyuncs.com:3306/ycx?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
-    username: ycx
-    password: Zjgf6666
-    type: com.alibaba.druid.pool.DruidDataSource
-  redis:
-    maxTotal: 1000
-    database: 0
-    host: hadoop100
-    port: 6379
-  http:
-    encoding:
-      enabled: true
-      force: true
-      charset: UTF-8
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:7001/eureka
+    learning: info
+
+mymail:
+  senderAddress: test_dra@qq.com
+  senderAccount: 查勘车系统服务小组
+  senderPassword: jmpkvjqvesbgeaai

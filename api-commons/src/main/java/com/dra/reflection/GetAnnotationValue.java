@@ -3,6 +3,7 @@ package com.dra.reflection;
 
 import com.dra.annotation.Public;
 import com.dra.annotation.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+@Slf4j
 public class GetAnnotationValue {
     private String methodName;
 
@@ -42,14 +44,16 @@ public class GetAnnotationValue {
 //        HashMap<String, Class<?>> classMap = SecurityIoc.getClassMap();
 
         String methodMessage = handler.toString();
-        System.out.println(methodMessage);
+        log.info("handler:"+methodMessage);
         //分离出类路径与方法名称
         String[] split = methodMessage.split("#");
         String clazzPath = split[0];
-        System.out.println(clazzPath);
-        System.out.println(split[1]);
+        log.info("clazzPath:"+clazzPath);
+//        System.out.println(clazzPath);
+        log.info("split[1]:"+split[1]);
+//        System.out.println(split[1]);
         methodName = split[1].substring(0,split[1].lastIndexOf("("));
-        System.out.println(methodName);
+        log.info(methodName);
 
 
         //匹配类路径 获取相关类

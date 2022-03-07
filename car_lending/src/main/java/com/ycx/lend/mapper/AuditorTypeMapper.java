@@ -1,6 +1,7 @@
-package com.wang.vire.mapper;
+package com.ycx.lend.mapper;
 
-import com.wang.vire.pojo.AuditorType;
+
+import com.ycx.lend.pojo.AuditorType;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 

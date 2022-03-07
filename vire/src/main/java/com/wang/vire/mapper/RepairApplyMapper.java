@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.wang.vire.pojo.RepairApply;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -26,6 +27,6 @@ public interface RepairApplyMapper extends Mapper<RepairApply> {
     @Select("select apply_id from repair_apply")
     List<String> queryAllApplicationId();
     //更改维修申请单状态
-    int updateAuditStatus(@Param("applyId") String applyId,
-                          @Param("applyStatus") Integer applyStatus);
+//    @Update("update repair_apply set apply_status = #{applyStatus} where apply_id = #{applyId}")
+    int updateAuditStatus(@Param("applyId") String applyId,int applyStatus);
 }

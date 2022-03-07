@@ -1,6 +1,6 @@
 package com.wang.vire.service;
 
-import com.wang.vire.pojo.AuditEnd;
+import com.ycx.lend.pojo.AuditEnd;
 
 import java.text.ParseException;
 import java.util.List;

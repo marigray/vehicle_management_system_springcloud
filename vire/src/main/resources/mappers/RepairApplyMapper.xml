@@ -19,7 +19,7 @@
     <update id="updateAuditStatus">
         update repair_apply
         set apply_status = #{applyStatus}
-        where apply_id=#{applyId};
+        where apply_id = #{applyId}
     </update>
 
 

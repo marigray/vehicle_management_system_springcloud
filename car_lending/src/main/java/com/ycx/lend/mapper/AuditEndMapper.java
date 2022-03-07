@@ -34,4 +34,7 @@ public interface AuditEndMapper extends Mapper<AuditEnd> {
 
     @Delete("delete from audit_end where application_id=#{applicationId}")
     int delByApplicationId(@Param("applicationId")String applicationId);
+
+    @Select("select * from audit_end where application_id=#{applicationId}")
+    AuditEnd queryByApplicationId(@Param("applicationId")String applicationId);
 }

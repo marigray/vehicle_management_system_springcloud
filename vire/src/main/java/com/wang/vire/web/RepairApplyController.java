@@ -7,6 +7,7 @@ import com.wang.vire.pojo.RepairApply;
 import com.wang.vire.service.RepairApplyService;
 import com.wang.vire.utils.WebCheck;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

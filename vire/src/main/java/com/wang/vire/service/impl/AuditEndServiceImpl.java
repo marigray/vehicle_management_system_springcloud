@@ -3,14 +3,19 @@ package com.wang.vire.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.wang.vire.mapper.*;
-import com.wang.vire.pojo.AuditEnd;
-import com.wang.vire.pojo.Auditor;
 import com.wang.vire.pojo.RepairApply;
 import com.wang.vire.service.AuditEndService;
 
 import com.wang.vire.service.CarService;
+import com.wang.vire.service.WangService;
 import com.wang.vire.utils.EmptyChecker;
+import com.wang.vire.utils.JsonUtils;
 import com.wang.vire.utils.ServiceUtils;
+import com.ycx.lend.pojo.Audit;
+import com.ycx.lend.pojo.AuditEnd;
+import com.ycx.lend.pojo.AuditStatus;
+import com.ycx.lend.pojo.Auditor;
+import com.ycx.lend.pojo.Car;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,26 +30,30 @@ import java.util.*;
 @Service
 public class AuditEndServiceImpl implements AuditEndService {
 
-    @Autowired
-    AuditEndMapper auditEndMapper;
-    @Autowired
-    AuditMapper auditMapper;
-    @Autowired
-    AuditorMapper auditorMapper;
+//    @Autowired
+//    AuditEndMapper auditEndMapper;
+//    @Autowired
+//    AuditMapper auditMapper;
+//    @Autowired
+//    AuditorMapper auditorMapper;
     @Autowired
     RepairApplyMapper repairApplyMapper;
-    @Autowired
-    CarMapper carMapper;
-    @Autowired
-    AuditStatusMapper auditStatusMapper;
+//    @Autowired
+//    CarMapper carMapper;
+//    @Autowired
+//    AuditStatusMapper auditStatusMapper;
     @Autowired
     CarService carService;
+    @Autowired
+    WangService wangService;
 
 
 
     private final String randomNum(){
         String i = String.valueOf(Math.abs(new Random().nextInt()));
-        if(auditEndMapper.selectByPrimaryKey(i)!=null){
+        Object auditEndClass = JsonUtils.JsonToPojo(wangService.auditEndSelByKey(i), AuditEnd.class);
+        AuditEnd auditEndClass1 = (AuditEnd) auditEndClass;
+        if(auditEndClass1!=null){
             this.randomNum();
         }
         return i;
@@ -52,7 +61,9 @@ public class AuditEndServiceImpl implements AuditEndService {
     @Override
     public int allotOneAuditEnd(String applyId) {
         //检查该申请单是否已被分配到终审
-        if (EmptyChecker.notEmpty(auditEndMapper.queryAuditEndByApplicationId(applyId))) {
+        Object auditEndClass = JsonUtils.JsonToPojo(wangService.auditEndSelByApplicationId(applyId), AuditEnd.class);
+        AuditEnd auditEndClass1 = (AuditEnd) auditEndClass;
+        if (EmptyChecker.notEmpty(auditEndClass1)) {
             //重复操作
             return -5;
         }
@@ -71,17 +82,24 @@ public class AuditEndServiceImpl implements AuditEndService {
 
         HashMap<String, Object> h1 = new HashMap<>();
         h1.put("auditCount", 1000000);
+
         //查找没有任务的审核员 分配审核
-        for (String endAuditorId : auditorMapper.queryEndAuditorId()) {
-            List<AuditEnd> auditEnds = auditEndMapper.queryAuditByAuditorId(endAuditorId);
-            if (EmptyChecker.isEmpty(auditEnds)) {
+        Object queryEndAuditorId = JsonUtils.JsonToListString(wangService.queryEndAuditorId());
+        List<String> queryEndAuditorIds = (List<String>) queryEndAuditorId;
+        for (String endAuditorId : queryEndAuditorIds) {
+            Object auditEndSelByAuditorId = JsonUtils.JsonToListPojo(wangService.auditEndSelByAuditorId(endAuditorId), AuditEnd.class);
+            List<AuditEnd> auditEndSelByAuditorIds = (List<AuditEnd>) auditEndSelByAuditorId;
+//            List<AuditEnd> auditEnds = auditEndSelByAuditorIds;
+            if (EmptyChecker.isEmpty(auditEndSelByAuditorIds)) {
                 h1.put("auditorId", endAuditorId);
                 break;
             }
         }
         //查找任务最少的终审员 分配审核
         if (EmptyChecker.isEmpty(h1.get("auditorId"))) {
-            for (HashMap<String, Object> hashMap : auditEndMapper.queryAuditOfEndAuditor()) {
+            Object auditEndSelNumOfEveryAuditor = JsonUtils.JsonToListPojo(wangService.auditEndSelNumOfEveryAuditor(), HashMap.class);
+            List<HashMap<String, Object>> auditEndSelNumOfEveryAuditors = (List<HashMap<String, Object>>) auditEndSelNumOfEveryAuditor;
+            for (HashMap<String, Object> hashMap : auditEndSelNumOfEveryAuditors) {
                 int auditCount = ServiceUtils.NumberToInt(hashMap.get("auditCount"));
                 Object auditorId = hashMap.get("auditorId");
                 if (auditCount < (Integer) h1.get("auditCount")) {
@@ -103,7 +121,9 @@ public class AuditEndServiceImpl implements AuditEndService {
 ////        }
         //过滤完成，进行赋值
         auditEnd.setAuditorId((String) h1.get("auditorId"));
-        return auditEndMapper.insertSelective(auditEnd);
+        Object auditEndInsertSelective = JsonUtils.JsonToPojo(wangService.auditEndInsertSelective(auditEnd), int.class);
+        int auditEndInsertSelective1 = (int) auditEndInsertSelective;
+        return auditEndInsertSelective1;
     }
 
 
@@ -113,11 +133,15 @@ public class AuditEndServiceImpl implements AuditEndService {
         if (EmptyChecker.isEmpty(auditId)) {
             return 0;
         }
+        Object auditEndClass = JsonUtils.JsonToPojo(wangService.auditEndSelByKey(auditId), AuditEnd.class);
+        AuditEnd auditEndClass1 = (AuditEnd) auditEndClass;
         //操作对象判定
-        if (EmptyChecker.isEmpty(auditEndMapper.selectByPrimaryKey(auditId))) {
+        if (EmptyChecker.isEmpty(auditEndClass1)) {
             return -3;
         }
-        return auditEndMapper.deleteByPrimaryKey(auditId);
+        Object auditEndDelByKey = JsonUtils.JsonToPojo(wangService.auditEndDelByKey(auditId), int.class);
+        int auditEndDelByKey1 = (int) auditEndDelByKey;
+        return auditEndDelByKey1;
 
     }
 
@@ -127,20 +151,27 @@ public class AuditEndServiceImpl implements AuditEndService {
             return 0;
         }
         AuditEnd auditEnd = new AuditEnd();
-        if (EmptyChecker.isEmpty(auditorMapper.selectByPrimaryKey(auditorId))) {
+        //判断审核员是否存在
+        Object auditorSelByKey = JsonUtils.JsonToPojo(wangService.auditorSelByKey(auditorId), Auditor.class);
+        Auditor auditorSelByKey1 = (Auditor) auditorSelByKey;
+        if (EmptyChecker.isEmpty(auditorSelByKey1)) {
             return -2;
         }
         //存放审核员权限，检查是否有足够权限
-        Integer auditorType = auditorMapper.selectByPrimaryKey(auditorId).getAuditorType();
+        Integer auditorType = auditorSelByKey1.getAuditorType();
         if (auditorType != 1 && auditorType != 2) {
             return -6;
         }
-        if (EmptyChecker.isEmpty(auditEndMapper.selectByPrimaryKey(auditId))) {
+        Object auditEndClass = JsonUtils.JsonToPojo(wangService.auditEndSelByKey(auditId), AuditEnd.class);
+        AuditEnd auditEndClass1 = (AuditEnd) auditEndClass;
+        if (EmptyChecker.isEmpty(auditEndClass1)) {
             return -3;
         }
         auditEnd.setAuditId(auditId);
         auditEnd.setAuditorId(auditorId);
-        return auditEndMapper.updateByPrimaryKeySelective(auditEnd);
+        Object auditEndUpdSelective = JsonUtils.JsonToPojo(wangService.auditEndUpdSelective(auditEnd), int.class);
+        int auditEndUpdSelective1 = (int) auditEndUpdSelective;
+        return auditEndUpdSelective1;
     }
 
     @Override
@@ -153,16 +184,20 @@ public class AuditEndServiceImpl implements AuditEndService {
         auditEnd.setAuditId(auditId);
         auditEnd.setEndStatus(status);
         auditEnd.setEndTime(date);
-        if (EmptyChecker.isEmpty(auditStatusMapper.selectByPrimaryKey(status))) {
+        Object auditStatusSelByKey = JsonUtils.JsonToPojo(wangService.auditStatusSelByKey(status), AuditStatus.class);
+        AuditStatus auditStatusSelByKey1 = (AuditStatus) auditStatusSelByKey;
+        if (EmptyChecker.isEmpty(auditStatusSelByKey1)) {
             return -2;
         }
-        if (EmptyChecker.isEmpty(auditEndMapper.selectByPrimaryKey(auditId))) {
+        Object auditEndClass = JsonUtils.JsonToPojo(wangService.auditEndSelByKey(auditId), AuditEnd.class);
+        AuditEnd auditEndClass1 = (AuditEnd) auditEndClass;
+        if (EmptyChecker.isEmpty(auditEndClass1)) {
             return -3;
         }
-        if (auditEnd.equals(auditEndMapper.selectByPrimaryKey(auditId))) {
+        if (auditEnd.equals(auditEndClass1)) {
             return -5;
         }
-        String applyId = auditEndMapper.selectByPrimaryKey(auditId).getApplicationId();
+        String applyId = auditEndClass1.getApplicationId();
         Integer applyStatus = repairApplyMapper.selectByPrimaryKey(applyId).getApplyStatus();
         //判定是否为重复审核
         if (applyStatus==2||applyStatus==3){
@@ -179,10 +214,12 @@ public class AuditEndServiceImpl implements AuditEndService {
         //审核通过，根据申请类型修改修改汽车状态
         if (status == 2) {
             //判定车辆状态是已经不是是闲置
-            if(carMapper.selectByPrimaryKey(
-                    repairApplyMapper.selectByPrimaryKey(auditEndMapper.selectByPrimaryKey(auditId).getApplicationId()).getCarId()
-                    ).getCarStatus()!=1)
-            //if (carMapper.queryCarByAuditEndId(auditId).getCarStatus() != 1)
+
+            Object carSelByKey =JsonUtils.JsonToPojo(wangService.carSelByKey(
+                    repairApplyMapper.selectByPrimaryKey(auditEndClass1.getApplicationId()).getCarId()
+            ), Car.class);
+            Car carSelByKey1 = (Car) carSelByKey;
+            if(carSelByKey1.getCarStatus()!=1)
             {
                 //将审核状态置为不通过
                 changeStatus(auditId, 3, changeTime);
@@ -203,7 +240,9 @@ public class AuditEndServiceImpl implements AuditEndService {
                 return i-10;
 
         }
-        return auditEndMapper.updateByPrimaryKeySelective(auditEnd);
+        Object auditEndUpdSelective = JsonUtils.JsonToPojo(wangService.auditEndUpdSelective(auditEnd), int.class);
+        int auditEndUpdSelective1 = (int) auditEndUpdSelective;
+        return auditEndUpdSelective1;
     }
 
     @Override
@@ -212,11 +251,15 @@ public class AuditEndServiceImpl implements AuditEndService {
             return null;
         }
         Page<AuditEnd> auditEnds = new Page<>();
-        Auditor auditor = auditorMapper.selectByPrimaryKey(auditorId);
+        Object auditorSelByKey = JsonUtils.JsonToPojo(wangService.auditorSelByKey(auditorId), Auditor.class);
+        Auditor auditor = (Auditor) auditorSelByKey;
+//        Auditor auditor = wangService.auditorSelByKey(auditorId);
         if (EmptyChecker.notEmpty(auditor)) {
             if (auditor.getAuditorType() == 2) {
                 PageHelper.startPage(pageNum, pageSize);
-                return auditEndMapper.queryAllAuditEnd();
+                Object auditEndSelAll = JsonUtils.JsonToListPojo(wangService.auditEndSelAll(), AuditEnd.class);
+                Page<AuditEnd> auditEndSelAlls = (Page<AuditEnd>) auditEndSelAll;
+                return auditEndSelAlls;
             } else {
                 AuditEnd auditEnd = new AuditEnd();
                 auditEnd.setEndStatus(-6);
@@ -243,12 +286,16 @@ public class AuditEndServiceImpl implements AuditEndService {
             return auditEnds;
         }
         //判断审核员是否为终审员
-        Auditor auditor = auditorMapper.selectByPrimaryKey(auditorId);
+        Object auditorSelByKey = JsonUtils.JsonToPojo(wangService.auditorSelByKey(auditorId), Auditor.class);
+        Auditor auditor = (Auditor) auditorSelByKey;
+//        Auditor auditor = wangService.auditorSelByKey(auditorId);
         if (EmptyChecker.notEmpty(auditor)) {
             //是终审员，执行查询操作
             if (auditor.getAuditorType() == 1) {
                 //存放查询结果
-                List<AuditEnd> auditEndsReturn = auditEndMapper.queryAuditByAuditorId(auditorId);
+                Object auditEndSelByAuditorId = JsonUtils.JsonToListPojo(wangService.auditEndSelByAuditorId(auditorId), AuditEnd.class);
+                List<AuditEnd> auditEndsReturn = (Page<AuditEnd>) auditEndSelByAuditorId;
+//                List<AuditEnd> auditEndsReturn = wangService.auditEndSelByAuditorId(auditorId);
                 if (EmptyChecker.notEmpty(auditEndsReturn)) {
                     //判断是否为未审核，是的话置为审核中
                     for (AuditEnd returnAuditEnd : auditEndsReturn) {
@@ -260,7 +307,9 @@ public class AuditEndServiceImpl implements AuditEndService {
                 return auditEndsReturn;
             } //是超级审核员，查询全部审核单
             else if(auditor.getAuditorType()==2){
-                return auditEndMapper.queryAllAuditEnd();
+                Object auditEndSelAll = JsonUtils.JsonToListPojo(wangService.auditEndSelAll(), AuditEnd.class);
+                Page<AuditEnd> auditEndSelAlls = (Page<AuditEnd>) auditEndSelAll;
+                return auditEndSelAlls;
             }
             else {
                 //不是终审员，返回权限不足

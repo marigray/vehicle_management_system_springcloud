@@ -6,8 +6,11 @@ import com.wang.vire.mapper.*;
 import com.wang.vire.pojo.Repair;
 import com.wang.vire.service.CarService;
 import com.wang.vire.service.RepairService;
+import com.wang.vire.service.WangService;
 import com.wang.vire.utils.EmptyChecker;
+import com.wang.vire.utils.JsonUtils;
 import com.wang.vire.utils.ServiceUtils;
+import com.ycx.lend.pojo.Car;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,16 +29,16 @@ import java.util.Random;
 public class RepairServiceImpl implements RepairService {
     @Autowired
     RepairMapper repairMapper;
-    @Autowired
-    UserMapper userMapper;
-    @Autowired
-    CarMapper carMapper;
+//    @Autowired
+//    UserMapper userMapper;
     @Autowired
     CarService carService;
     @Autowired
     RepairerMapper repairerMapper;
     @Autowired
     RepairApplyMapper repairApplyMapper;
+    @Autowired
+    WangService wangService;
 
     private final String randomNum(){
         String i = String.valueOf(Math.abs(new Random().nextInt()));
@@ -60,7 +63,13 @@ public class RepairServiceImpl implements RepairService {
             return -2;
         }
         /*判断车辆是否存在*/
-        if (EmptyChecker.isEmpty(carMapper.selectByPrimaryKey(repair.getCarId()))){
+        Object carSelByKey = JsonUtils.JsonToPojo(wangService.carSelByKey(repair.getCarId()), Car.class);
+        Car carSelByKey1 = (Car) carSelByKey;
+        if (EmptyChecker.isEmpty(carSelByKey1)){
+            return -2;
+        }
+        //判断申请单是否存在
+        if(EmptyChecker.isEmpty(repairApplyMapper.selectByPrimaryKey(repair.getApplyId()))){
             return -2;
         }
         String repairId=this.randomNum();
@@ -106,7 +115,9 @@ public class RepairServiceImpl implements RepairService {
             return -2;
         }
         /*判断车辆是否存在*/
-        if (EmptyChecker.isEmpty(carMapper.selectByPrimaryKey(repair.getCarId()))){
+        Object carSelByKey = JsonUtils.JsonToPojo(wangService.carSelByKey(repair.getCarId()), Car.class);
+        Car carSelByKey1 = (Car) carSelByKey;
+        if (EmptyChecker.isEmpty(carSelByKey1)){
             return -2;
         }
         /*判断用户是否存在*/

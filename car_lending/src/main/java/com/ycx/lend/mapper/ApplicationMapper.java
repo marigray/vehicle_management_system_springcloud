@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -40,4 +41,7 @@ public interface ApplicationMapper extends Mapper<Application> {
     //通过车牌号查询派车未归还的申请
     @Select("select * from application where car_id=#{carId} and if_return=0")
     Application queryNotReturnByCarId(@Param("carId") String carId);
+
+    //查询某时间之前的所有借用申请并审核通过的申请单并排列
+    List<Application> queryApplicationByTime(@Param("carId")String carId, @Param("applicationTime") Date applicationTime);
 }

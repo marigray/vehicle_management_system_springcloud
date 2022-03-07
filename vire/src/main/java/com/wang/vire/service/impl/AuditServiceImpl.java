@@ -1,13 +1,19 @@
 package com.wang.vire.service.impl;
 
+
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.wang.vire.mapper.*;
-import com.wang.vire.pojo.Audit;
+import com.wang.vire.pojo.RepairApply;
 import com.wang.vire.service.AuditEndService;
 import com.wang.vire.service.AuditService;
+import com.wang.vire.service.WangService;
 import com.wang.vire.utils.EmptyChecker;
+import com.wang.vire.utils.JsonUtils;
 import com.wang.vire.utils.ServiceUtils;
+import com.ycx.lend.pojo.Audit;
+import com.ycx.lend.pojo.AuditEnd;
+import com.ycx.lend.pojo.Auditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +31,15 @@ public class AuditServiceImpl implements AuditService {
     @Autowired
     RepairApplyMapper repairApplyMapper;
     @Autowired
-    AuditMapper auditMapper;
-    @Autowired
-    AuditEndMapper auditEndMapper;
-    @Autowired
-    AuditorMapper auditorMapper;
-    @Autowired
-    AuditStatusMapper auditStatusMapper;
-    @Autowired
     AuditEndService auditEndService;
+    @Autowired
+    WangService wangService;
 
     private final String randomNum(){
         String i = String.valueOf(Math.abs(new Random().nextInt()));
-        if(auditMapper.selectByPrimaryKey(i)!=null){
+        Object auditSelByKey = JsonUtils.JsonToPojo(wangService.auditSelByKey(i), Audit.class);
+        Audit auditSelByKey1 = (Audit) auditSelByKey;
+        if(auditSelByKey1!=null){
             this.randomNum();
         }
         return i;
@@ -61,18 +63,26 @@ public class AuditServiceImpl implements AuditService {
         HashMap<String, Object> h1 = new HashMap<>();
         h1.put("auditCount", 1000000);
         //查找没有任务的审核员 分配审核
-        for (String s : auditorMapper.queryNormalAuditorId()) {
-            List<Audit> audit1 = auditMapper.queryAuditByAuditorId(s);
+        Object auditorSelAllNormal = JsonUtils.JsonToListString(wangService.auditorSelAllNormal());
+        List<String> auditorSelAllNormals = (List<String>) auditorSelAllNormal;
+        for (String s : auditorSelAllNormals) {
+            Object auditSelByAuditorId = JsonUtils.JsonToListPojo(wangService.auditSelByAuditorId(s), Audit.class);
+            List<Audit> audit1 = (List<Audit>) auditSelByAuditorId;
+//            List<Audit> audit1 = wangService.auditSelByAuditorId(s);
             if (EmptyChecker.isEmpty(audit1)) {
                 h1.put("auditorId", s);
                 break;
             }
         }
         if (EmptyChecker.isEmpty(h1.get("auditorId"))) {
-            for (HashMap<String, Object> hashMap : auditMapper.queryAuditOfAuditor()) {
+            Object auditSelNumByNormalAuditor = JsonUtils.JsonToListPojo(wangService.auditSelNumByNormalAuditor(), HashMap.class);
+            List<HashMap<String, Object>> auditSelNumByNormalAuditor1 = (List<HashMap<String, Object>>) auditSelNumByNormalAuditor;
+            for (HashMap<String, Object> hashMap : auditSelNumByNormalAuditor1) {
                 String auditorId = (String) hashMap.get("auditorId");
                 //判断该审核员是否已经被分配该审核单
-                if (EmptyChecker.isEmpty(auditMapper.queryIfAllot(auditorId,applicationId))){
+                Object auditSelIfAllot = JsonUtils.JsonToPojo(wangService.auditSelIfAllot(auditorId,applicationId), Audit.class);
+                Audit auditSelIfAllot1 = (Audit) auditSelIfAllot;
+                if (EmptyChecker.isEmpty(auditSelIfAllot1)){
                     int auditCount = ServiceUtils.NumberToInt(hashMap.get("auditCount"));
                     if (auditCount < (Integer) h1.get("auditCount")) {
                         h1.put("auditorId", auditorId);
@@ -94,7 +104,10 @@ public class AuditServiceImpl implements AuditService {
 //        }
         //过滤完成，进行赋值
         audit.setAuditorId((String) h1.get("auditorId"));
-        return auditMapper.insertSelective(audit);
+        Object o = wangService.auditInsertSelective(audit);
+        int auditInsertSelective = JsonUtils.JsonToInt(o);
+//        int auditInsertSelective1 = (int) auditInsertSelective;
+        return auditInsertSelective;
     }
 
     //将审核单分配给三个不同的人
@@ -105,9 +118,13 @@ public class AuditServiceImpl implements AuditService {
         for (int j = 0; j < 3; j++) {
             for (String s : repairApplyMapper.queryAllApplicationId()) {
                 //判断有无值，无值时设置计数为0，防止空指针
-                if (EmptyChecker.notEmpty(auditMapper.queryAuditOfAuditorById(s))) {
+                Object auditSelNumByAuditorId = JsonUtils.JsonToPojo(wangService.auditSelNumByAuditorId(s), HashMap.class);
+                HashMap<String, Object> auditSelNumByAuditorIds = (HashMap<String, Object>) auditSelNumByAuditorId;
+                if (EmptyChecker.notEmpty(auditSelNumByAuditorIds)) {
                     //防止冗余分配
-                    HashMap<String, Object> countMap = auditMapper.queryAuditorCountById(s);
+                    Object auditSelAuditNumAllotAuditor = JsonUtils.JsonToPojo(wangService.auditSelAuditNumAllotAuditor(s), HashMap.class);
+                    HashMap<String, Object> countMap = (HashMap<String, Object>) auditSelAuditNumAllotAuditor;
+//                    HashMap<String, Object> countMap = wangService.auditSelAuditNumAllotAuditor(s);
                     //判空
                     if (countMap == null) {
                         auditCount = 0;
@@ -130,10 +147,14 @@ public class AuditServiceImpl implements AuditService {
             return 0;
         }
 //        操作对象判定
-        if (EmptyChecker.isEmpty(auditMapper.selectByPrimaryKey(auditId))) {
+        Object auditSelByKey = JsonUtils.JsonToPojo(wangService.auditSelByKey(auditId), Audit.class);
+        Audit auditSelByKey1 = (Audit) auditSelByKey;
+        if (EmptyChecker.isEmpty(auditSelByKey1)) {
             return -3;
         }
-        return auditMapper.deleteByPrimaryKey(auditId);
+        Object auditDelByKey = JsonUtils.JsonToInt(wangService.auditDelByKey(auditId));
+        int auditDelByKey1 = (int) auditDelByKey;
+        return auditDelByKey1;
     }
 
     @Override
@@ -142,15 +163,21 @@ public class AuditServiceImpl implements AuditService {
             return 0;
         }
         Audit audit = new Audit();
-        if (EmptyChecker.isEmpty(auditorMapper.selectByPrimaryKey(auditorId))) {
+        Object auditorSelByKey = JsonUtils.JsonToPojo(wangService.auditorSelByKey(auditorId), Auditor.class);
+        Auditor auditorSelByKey1 = (Auditor) auditorSelByKey;
+        if (EmptyChecker.isEmpty(auditorSelByKey1)) {
             return -2;
         }
-        if (EmptyChecker.isEmpty(auditMapper.selectByPrimaryKey(auditId))) {
+        Object auditSelByKey = JsonUtils.JsonToPojo(wangService.auditSelByKey(auditId), Audit.class);
+        Audit auditSelByKey1 = (Audit) auditSelByKey;
+        if (EmptyChecker.isEmpty(auditSelByKey1)) {
             return -3;
         }
         audit.setAuditId(auditId);
         audit.setAuditorId(auditorId);
-        return auditMapper.updateByPrimaryKeySelective(audit);
+        Object auditUpdSelective = JsonUtils.JsonToInt(wangService.auditUpdSelective(audit));
+        int auditUpdSelective1 = (int) auditUpdSelective;
+        return auditUpdSelective1;
     }
 
     @Override
@@ -163,15 +190,19 @@ public class AuditServiceImpl implements AuditService {
         audit.setAuditId(auditId);
         audit.setAuditStatus(status);
         audit.setAuditTime(date);
-        if (EmptyChecker.isEmpty(auditStatusMapper.selectByPrimaryKey(status))) {
+        if (EmptyChecker.isEmpty(wangService.auditStatusSelByKey(status))) {
             return -2;
         }
-        if (audit.equals(auditMapper.selectByPrimaryKey(auditId))) {
+        Object auditSelByKey = JsonUtils.JsonToPojo(wangService.auditSelByKey(auditId), Audit.class);
+        Audit auditSelByKey1 = (Audit) auditSelByKey;
+        if (audit.equals(auditSelByKey1)) {
             return -5;
         }
         //进行状态修改
-        int changeStatus = auditMapper.updateByPrimaryKeySelective(audit);
-        String applicationId = auditMapper.selectByPrimaryKey(auditId).getApplicationId();
+        Object auditUpdSelective = JsonUtils.JsonToInt(wangService.auditUpdSelective(audit));
+        int changeStatus = (int) auditUpdSelective;
+//        int changeStatus = wangService.auditUpdSelective(audit);
+        String applicationId = auditSelByKey1.getApplicationId();
         //更新状态分类
         if (status == 1) {
             //如果申请表中状态未未审核，则将状态同步更新到申请表
@@ -183,19 +214,28 @@ public class AuditServiceImpl implements AuditService {
         }
         //当通过审核时，进行判断。
         else if (status == 2) {
-            Integer passed = auditMapper.queryPassedCount(applicationId);
+            Object auditSelPassedCountByApplicationId = JsonUtils.JsonToInt(wangService.auditSelPassedCountByApplicationId(applicationId));
+            Integer passed = (Integer) auditSelPassedCountByApplicationId;
+//            Integer passed = wangService.auditSelPassedCountByApplicationId(applicationId);
             //判断终审表终是否已经分配过该申请表
-            if (EmptyChecker.isEmpty(auditEndMapper.queryAuditEndByApplicationId(applicationId))) {
+            Object auditEndClass = JsonUtils.JsonToPojo(wangService.auditEndSelByApplicationId(applicationId), AuditEnd.class);
+            AuditEnd auditEndClass1 = (AuditEnd) auditEndClass;
+            if (EmptyChecker.isEmpty(auditEndClass1)) {
                 //如果该申请单有三个审核中有两个审核已经通过，则将其添加到终审表中。
                 if (passed != null && passed >= 2) {
                     auditEndService.allotOneAuditEnd(applicationId);
                 }
+                RepairApply repairApply = repairApplyMapper.selectByPrimaryKey(applicationId);
+                repairApply.setApplyStatus(4);
+                repairApplyMapper.updateByPrimaryKeySelective(repairApply);
                 // 同时将其申请表状态置为 ”终审中“
-                repairApplyMapper.updateAuditStatus(applicationId, 4);
+//                repairApplyMapper.updateAuditStatus(applicationId, 4);
             }
 
         } else if (status == 3) {
-            Integer notPass = auditMapper.queryNotPassCount(applicationId);
+            Object auditSelNotPassedCountByApplicationId = JsonUtils.JsonToInt(wangService.auditSelNotPassedCountByApplicationId(applicationId));
+            Integer notPass = (Integer) auditSelNotPassedCountByApplicationId;
+//            Integer notPass = wangService.auditSelNotPassedCountByApplicationId(applicationId);
             if (notPass != null && notPass >= 2) {
                 int i = repairApplyMapper.updateAuditStatus(applicationId, status);
                 if (i < 0)
@@ -211,7 +251,19 @@ public class AuditServiceImpl implements AuditService {
             return null;
         }
         PageHelper.startPage(pageNum, pageSize);
-        return auditMapper.queryAllAudit();
+//        Page<Audit> audits=new Page<>();
+//        JSON o = (JSON)wangService.auditSelAll();
+//        FormatData formatData = o.toJavaObject(FormatData.class);
+//        String s = JSONObject.toJSONString(formatData.getData());
+//        JSONArray jsonArray=JSONArray.parseArray(s);
+//        for (Object value : jsonArray) {
+//            JSONObject object = (JSONObject) value;
+//            audits.add(JSONObject.parseObject(object.toString(), Audit.class));
+//            System.out.println(object);
+//        }
+        Object lasses = JsonUtils.JsonToListPojo(wangService.auditSelAll(), Audit.class);
+        Page<Audit> audits = (Page<Audit>) lasses;
+        return audits;
     }
 
     @Override
@@ -225,12 +277,16 @@ public class AuditServiceImpl implements AuditService {
             return audits;
         }
         //判断审核员是否存在
-        if (EmptyChecker.isEmpty(auditorMapper.selectByPrimaryKey(auditorId))) {
+        Object auditorSelByKey = JsonUtils.JsonToPojo(wangService.auditorSelByKey(auditorId), Auditor.class);
+        Auditor auditorSelByKey1 = (Auditor) auditorSelByKey;
+        if (EmptyChecker.isEmpty(auditorSelByKey1)) {
             audit.setAuditStatus(-2);
             audits.add(audit);
             return audits;
         }
-        List<Audit> returnAudits = auditMapper.queryAuditByAuditor(auditorId);
+        Object auditSelByAuditorId = JsonUtils.JsonToListPojo(wangService.auditSelByAuditorId(auditorId), Audit.class);
+        List<Audit> returnAudits = (List<Audit>) auditSelByAuditorId;
+//        List<Audit> returnAudits = wangService.auditSelByAuditorId(auditorId);
         if (EmptyChecker.notEmpty(returnAudits)) {
             //判断是否为审核中状态，不是的话 置为审核中
             for (Audit returnAudit : returnAudits) {
@@ -243,6 +299,8 @@ public class AuditServiceImpl implements AuditService {
     }
     @Override
     public List<Audit> getAuditByApplication(String applicationId) {
-        return auditMapper.getAuditByApplication(applicationId);
+        Object auditSelByApplicationId = JsonUtils.JsonToListPojo(wangService.auditSelByApplicationId(applicationId), Audit.class);
+        List<Audit> auditSelByApplicationId1 = (List<Audit>) auditSelByApplicationId;
+        return auditSelByApplicationId1;
     }
 }

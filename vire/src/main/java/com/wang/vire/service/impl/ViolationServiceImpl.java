@@ -2,17 +2,16 @@ package com.wang.vire.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.wang.vire.mapper.ApplicationMapper;
-import com.wang.vire.mapper.CarMapper;
-import com.wang.vire.mapper.UserMapper;
 import com.wang.vire.mapper.ViolationMapper;
-import com.wang.vire.pojo.Application;
-import com.wang.vire.pojo.RepairApply;
 import com.wang.vire.pojo.VioMessage;
 import com.wang.vire.pojo.Violation;
 import com.wang.vire.service.ViolationService;
+import com.wang.vire.service.WangService;
 import com.wang.vire.utils.EmptyChecker;
+import com.wang.vire.utils.JsonUtils;
 import com.wang.vire.utils.ServiceUtils;
+import com.ycx.lend.pojo.Application;
+import com.ycx.lend.pojo.Car;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,11 +31,8 @@ public class ViolationServiceImpl implements ViolationService {
     @Autowired
     ViolationMapper violationMapper;
     @Autowired
-    ApplicationMapper applicationMapper;
-    @Autowired
-    CarMapper carMapper;
-    @Autowired
-    UserMapper userMapper;
+    WangService wangService;
+
 
 
     private final String randomNum(){
@@ -55,7 +51,9 @@ public class ViolationServiceImpl implements ViolationService {
             return 0;
         }
         //判断车辆是否存在
-        if (EmptyChecker.isEmpty(carMapper.selectByPrimaryKey(vioMessage.getCarId()))){
+        Object carSelByKey = JsonUtils.JsonToPojo(wangService.carSelByKey(vioMessage.getCarId()), Car.class);
+        Car carSelByKey1 = (Car) carSelByKey;
+        if (EmptyChecker.isEmpty(carSelByKey1)){
             return -2;
         }
         //根据时间查找造成事故的人员
@@ -74,15 +72,20 @@ public class ViolationServiceImpl implements ViolationService {
 //                }
 //            }
 //        }
-        List<Application> applications=applicationMapper.queryApplicationByTime(vioMessage.getCarId(),ServiceUtils.StrToDate(vioMessage.getVioTime()));
-        Application app= applications.get(0);
+//        List<Application> applications=applicationMapper.queryApplicationByTime(vioMessage.getCarId(),ServiceUtils.StrToDate(vioMessage.getVioTime()));
+//        Application app= applications.get(0);
+        Object applicationByTime = JsonUtils.JsonToPojo(wangService.applicationByTime(vioMessage.getCarId(), vioMessage.getVioTime()), Application.class);
+        Application app = (Application) applicationByTime;
+//        Application app = wangService.applicationByTime(vioMessage.getCarId(), ServiceUtils.StrToDate(vioMessage.getVioTime()));
         Violation violation = new Violation();
         //判断用户是否存在,如果不存在，将其设为null
         if(EmptyChecker.isEmpty(app)){
             violation.setViolatorId(null);
-        }else if(EmptyChecker.isEmpty(userMapper.selectByPrimaryKey(app.getUserId()))){
-            return -2;
-        }else{
+        }
+//        else if(EmptyChecker.isEmpty(userMapper.selectByPrimaryKey(app.getUserId()))){
+//            return -2;
+//        }
+        else{
             violation.setViolatorId(app.getUserId());
         }
         violation.setVioId(this.randomNum());

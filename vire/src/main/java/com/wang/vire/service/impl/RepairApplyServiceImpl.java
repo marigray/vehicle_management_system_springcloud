@@ -1,5 +1,8 @@
 package com.wang.vire.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.dra.pojo.msg.FormatData;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -7,9 +10,13 @@ import com.wang.vire.mapper.*;
 import com.wang.vire.pojo.RepairApply;
 import com.wang.vire.service.AuditService;
 import com.wang.vire.service.RepairApplyService;
+import com.wang.vire.service.WangService;
 import com.wang.vire.utils.EmptyChecker;
+import com.wang.vire.utils.JsonUtils;
 import com.wang.vire.utils.RandomNum;
 import com.wang.vire.utils.ServiceUtils;
+import com.ycx.lend.pojo.AuditEnd;
+import com.ycx.lend.pojo.Car;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,20 +35,11 @@ public class RepairApplyServiceImpl implements RepairApplyService {
     @Autowired
     RepairApplyMapper repairApplyMapper;
     @Autowired
-    AuditStatusMapper auditStatusMapper;
-    @Autowired
-    CarMapper carMapper;
-    @Autowired
-    AuditMapper auditMapper;
-    @Autowired
     AuditService auditService;
-    @Autowired
-    UserMapper userMapper;
     @Autowired
     RepairMapper repairMapper;
     @Autowired
-    AuditEndMapper auditEndMapper;
-
+    WangService wangService;
 
     private final String randomNum(){
         String i = String.valueOf(Math.abs(new Random().nextInt()));
@@ -62,21 +60,34 @@ public class RepairApplyServiceImpl implements RepairApplyService {
             return 0;
         }
         /*判断用户是否存在*/
-        if(EmptyChecker.isEmpty(userMapper.selectByPrimaryKey(repairApply.getApplicantId()))){
-            return -2;
-        }
+//        if(EmptyChecker.isEmpty(userMapper.selectByPrimaryKey(repairApply.getApplicantId()))){
+//            return -2;
+//        }
         /*判断车辆是否存在*/
-        if (EmptyChecker.isEmpty(carMapper.selectByPrimaryKey(repairApply.getCarId()))){
+//        System.out.println("===========================");
+//        JSON o = (JSON)wangService.carSelByKey(repairApply.getCarId());
+//        FormatData formatData = o.toJavaObject(FormatData.class);
+//        System.out.println(formatData.getData().getClass());
+//        JSON ww=(JSON)formatData.getData();
+//        Car car = ww.toJavaObject(Car.class);
+//        System.out.println(car);
+        Object carClass =JsonUtils.JsonToPojo(wangService.carSelByKey(repairApply.getCarId()), Car.class);
+        Car carClass1 = (Car) carClass;
+//        System.out.println(carClass1);
+//        System.out.println("===========================");
+//        System.out.println(wangService.carSelByKey(repairApply.getCarId()).getClass());
+
+        if (EmptyChecker.isEmpty(carClass1)){
             return -2;
         }
         /*
         判断是否有该车辆的未审核和审核中状态存在
          */
-        if (EmptyChecker.notEmpty(repairApplyMapper.queryApplyByCarIdAndApplyStatus(repairApply.getCarId(),0)
-                )||EmptyChecker.notEmpty(repairApplyMapper.queryApplyByCarIdAndApplyStatus(repairApply.getCarId(),1))
-        ) {
-            return -1;
-        }
+//        if (EmptyChecker.notEmpty(repairApplyMapper.queryApplyByCarIdAndApplyStatus(repairApply.getCarId(),0)
+//                )||EmptyChecker.notEmpty(repairApplyMapper.queryApplyByCarIdAndApplyStatus(repairApply.getCarId(),1))
+//        ) {
+//            return -1;
+//        }
         /*
         生成主键，并设置时间为空，初始状态为未审核
          */
@@ -92,7 +103,9 @@ public class RepairApplyServiceImpl implements RepairApplyService {
         //每个申请分配给三个不同审核员审核
         for (int j = 0; j < 3; j++) {
             //防止冗余分配
-            HashMap<String, Object> countMap = auditMapper.queryAuditorCountById(applyId);
+            Object auditSelAuditNumAllotAuditor = JsonUtils.JsonToPojo(wangService.auditSelAuditNumAllotAuditor(applyId), HashMap.class);
+            HashMap<String, Object> countMap = (HashMap<String, Object>) auditSelAuditNumAllotAuditor;
+//            HashMap<String, Object> countMap = wangService.auditSelAuditNumAllotAuditor(applyId);
             //判断有无值，无值时设置计数为0，防止空指针
             if (EmptyChecker.notEmpty(countMap)) {
                 auditCount = ServiceUtils.NumberToInt(countMap.get("applicationCount"));
@@ -119,16 +132,28 @@ public class RepairApplyServiceImpl implements RepairApplyService {
             return -7;
         }
         //判断该申请表是否已经通过终审
-        if(EmptyChecker.notEmpty(auditEndMapper.queryByApplicationId(applyId))&&
-                auditEndMapper.queryStatusByApplicationId(applyId)==2){
+        Object auditEndSelBy = JsonUtils.JsonToPojo(wangService.auditEndSelByApplicationId(applyId), AuditEnd.class);
+        AuditEnd auditEndSelBy1 = (AuditEnd) auditEndSelBy;
+        if(EmptyChecker.notEmpty(auditEndSelBy1)&&
+                auditEndSelBy1.getEndStatus() ==2){
             return -7;
         }
         //删除终审表中的信息
-        if (EmptyChecker.notEmpty(auditEndMapper.queryByApplicationId(applyId))){
-            auditEndMapper.delByApplicationId(applyId);
+        if(EmptyChecker.notEmpty(auditEndSelBy1)){
+            Object auditEndDelByKey = JsonUtils.JsonToPojo(wangService.auditEndDelByKey(auditEndSelBy1.getAuditId()), int.class);
+            int auditEndDelByKey1 = (int) auditEndDelByKey;
+            if(auditEndDelByKey1<=0){
+                return  -4;
+            }
+
         }
         //删除审核表中的信息
-        auditMapper.deleteByApplicationId(applyId);
+        Object auditDelByApplicationId = JsonUtils.JsonToInt(wangService.auditDelByApplicationId(applyId));
+        int auditDelByApplicationId1 = (int) auditDelByApplicationId;
+        if(auditDelByApplicationId1<=0){
+            return -4;
+        }
+//        wangService.auditDelByApplicationId(applyId);
         return repairApplyMapper.deleteByPrimaryKey(applyId);
     }
 
@@ -142,10 +167,12 @@ public class RepairApplyServiceImpl implements RepairApplyService {
             return 0;
         }
         /*判断用户是否存在*/
-        if(EmptyChecker.isEmpty(userMapper.selectByPrimaryKey(repairApply.getApplicantId()))){
-            return -2;
-        }
-        if (EmptyChecker.isEmpty(carMapper.selectByPrimaryKey(repairApply.getCarId()))){
+//        if(EmptyChecker.isEmpty(userMapper.selectByPrimaryKey(repairApply.getApplicantId()))){
+//            return -2;
+//        }
+        Object carSelByKey = JsonUtils.JsonToPojo(wangService.carSelByKey(repairApply.getCarId()), Car.class);
+        Car carSelByKey1 = (Car) carSelByKey;
+        if (EmptyChecker.isEmpty(carSelByKey1)){
             return -2;
         }
         //判断是否存在该申请单

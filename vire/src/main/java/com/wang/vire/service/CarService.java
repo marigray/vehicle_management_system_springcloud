@@ -1,8 +1,7 @@
 package com.wang.vire.service;
 
-import com.wang.vire.pojo.Car;
+import com.ycx.lend.pojo.Car;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -19,10 +18,10 @@ public interface CarService {
     //存放汽车状态变化时间
     int addCarChange(String carId, Integer afterStatus, Date changeTime);
 
-    //查询闲置车辆
-    List<Car> queryIdleCar();
-
-    //根据车辆状态码查询车辆状态描述
-    String queryCarStatusName(Integer carStatus);
+//    //查询闲置车辆
+//    List<Car> queryIdleCar();
+//
+//    //根据车辆状态码查询车辆状态描述
+//    String queryCarStatusName(Integer carStatus);
 
 }

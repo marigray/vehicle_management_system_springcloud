@@ -2,10 +2,10 @@ package com.wang.vire.web;
 
 import com.dra.pojo.msg.FormatData;
 import com.wang.vire.exception.ParamException;
-import com.wang.vire.pojo.AuditEnd;
 import com.wang.vire.service.AuditEndService;
 import com.wang.vire.utils.EmptyChecker;
 import com.wang.vire.utils.WebCheck;
+import com.ycx.lend.pojo.AuditEnd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

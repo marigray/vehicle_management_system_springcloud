@@ -1,7 +1,7 @@
 package com.wang.vire.service;
 
 import com.github.pagehelper.Page;
-import com.wang.vire.pojo.Audit;
+import com.ycx.lend.pojo.Audit;
 
 import java.text.ParseException;
 import java.util.List;

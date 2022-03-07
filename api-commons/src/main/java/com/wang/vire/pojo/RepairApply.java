@@ -24,4 +24,5 @@ public class RepairApply implements Serializable {
   private String repairReasons;
   private Date applyTime;
   private Integer applyStatus;
+  private Integer type;
 }

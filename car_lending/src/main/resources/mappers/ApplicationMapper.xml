@@ -15,4 +15,11 @@
         select max(application_id)
         from application
     </select>
+    <select id="queryApplicationByTime" resultType="Application">
+        select *
+        from application
+        where #{applicationTime} >= application_time and type='0'
+          and audit_status='2' and car_id=#{carId}
+        order by application_time DESC
+    </select>
 </mapper>

@@ -1,24 +1,25 @@
 package com.ycx.lend.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.dra.pojo.msg.FormatData;
 import com.ycx.lend.exception.ParamException;
 import com.ycx.lend.mapper.*;
 import com.ycx.lend.pojo.Application;
 import com.ycx.lend.pojo.Car;
 import com.ycx.lend.pojo.CarChange;
+import com.ycx.lend.pojo.CarGps;
 import com.ycx.lend.service.CarService;
 import com.ycx.lend.service.CompanyService;
 import com.ycx.lend.service.GPSLogService;
 import com.ycx.lend.utils.EmptyChecker;
+import com.ycx.lend.utils.GPSUtils;
 import com.ycx.lend.utils.ServiceUtils;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.awt.*;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -112,14 +113,19 @@ public class CarServiceImpl implements CarService {
                 if (application.getIfReturn() != 0) {
                     return -7;
                 }
-            //判断汽车位置是否在公司内部
+                //判断汽车位置是否在公司内部
                 //获取公司定位
                 HashMap<String, Double> companyLocation = companyService.getCompanyLocation();
                 //获取汽车定位
                 long LongTime = date.getTime();
-                Object carLocation = gpsLogService.search(carId, LongTime, LongTime, 1, 1);
-                System.out.println(carLocation);
-//                GPSUtils.getDistance(, , companyLocation.get("longitude"), companyLocation.get("latitude"));
+                JSON carLocation = (JSON) gpsLogService.search(carId, LongTime - 1, LongTime + 1, 1, 1);
+                CarGps carGps = JsonToCarGps(carLocation);
+                String s = GPSUtils.GpsConvert(carGps.getPositionX(), carGps.getPositionY());
+                String[] location = s.split(",");
+                double distance = GPSUtils.getDistance(Double.parseDouble(location[0]), Double.parseDouble(location[1]), companyLocation.get("longitude"), companyLocation.get("latitude"));
+                if(distance>400){
+                    return -9;
+                }
                 applicationMapper.updateIfReturn(application.getApplicationId(), 1);
             } else return -6;
         }
@@ -161,5 +167,19 @@ public class CarServiceImpl implements CarService {
         Point carP = new Point();
         Point companyP = new Point();
         return false;
+    }
+
+    private CarGps JsonToCarGps(JSON json) {
+        FormatData formatData = json.toJavaObject(FormatData.class);
+        JSONArray data = (JSONArray) formatData.getData();
+        JSON json1 = (JSON) data.get(0);
+        HashMap<String, Object> location = JSON.parseObject(json1.toString(), HashMap.class);
+        System.out.println(location);
+        CarGps carGps = new CarGps();
+        BigDecimal positionX = (BigDecimal) location.get("positionX");
+        BigDecimal positionY = (BigDecimal) location.get("positionY");
+        carGps.setPositionX(positionX);
+        carGps.setPositionY(positionY);
+        return carGps;
     }
 }

@@ -3,6 +3,7 @@ package com.ycx.lend.utils;
 
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 /**
@@ -24,23 +25,27 @@ public class GPSUtils {
      * @param lng2 第二经度
      * @return 两坐标之间的距离
      */
-    public static double getDistance(double lat1,double lng1,double lat2,double lng2) {
+    public static double getDistance(double lat1, double lng1, double lat2, double lng2) {
         double radLat1 = rad(lat1);
         double radLat2 = rad(lat2);
         double a = radLat1 - radLat2;
         double b = rad(lng1) - rad(lng2);
 
-        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
-                Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+                Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
         s = s * EARTH_RADIUS;
         s = Math.round(s * 10000) / 10;
         return s;
     }
 
-    public static String GpsConvert(String location){
+    public static String GpsConvert(BigDecimal X, BigDecimal Y) {
+        StringBuilder location = new StringBuilder();
+        location.append(X);
+        location.append(",");
+        location.append(Y);
         RestTemplate restTemplate = new RestTemplate();
-        HashMap<String,String> ret = restTemplate.getForObject("https://restapi.amap.com/v3/assistant/coordinate/convert?locations={location}&coordsys=gps&output=JSON&key=af856185a75304af38e202a35f7bbb0b"
-                , HashMap.class,location);
+        HashMap<String, String> ret = restTemplate.getForObject("https://restapi.amap.com/v3/assistant/coordinate/convert?locations={location}&coordsys=gps&output=JSON&key=af856185a75304af38e202a35f7bbb0b"
+                , HashMap.class, location);
         assert ret != null;
         return ret.get("locations");
     }

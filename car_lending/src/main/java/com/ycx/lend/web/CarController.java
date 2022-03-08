@@ -36,6 +36,9 @@ public class CarController {
                                         @RequestParam("carId") String carId,
                                         @RequestParam("time") String time) throws ParamException, ParseException {
         int i = carService.returnCar(userId, carId, time);
+        if (i==-9){
+                throw new ParamException("车未停入规定区域内，无法还车", 408);
+        }
         WebCheck.isError(i);
         return new FormatData<>(i);
     }

@@ -1,6 +1,8 @@
 package com.ycx.lend.utils;
 
 
+import com.dra.pojo.gps.GpsLog;
+import com.ycx.lend.pojo.CarGps;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -38,7 +40,9 @@ public class GPSUtils {
         return s;
     }
 
-    public static String GpsConvert(BigDecimal X, BigDecimal Y) {
+    public static String GpsConvert(double X, double Y) {
+        X = wash(X);
+        Y = wash(Y);
         StringBuilder location = new StringBuilder();
         location.append(X);
         location.append(",");
@@ -51,4 +55,21 @@ public class GPSUtils {
     }
 
 
+    private static double wash(double var1) {
+        int de;
+        int abc;
+        double fghi;
+
+        String var2 = String.valueOf(var1);
+        System.out.println(var2);
+        String[] var3 = var2.split("\\.");
+
+        fghi = Double.parseDouble(var3[1]);
+        int v = Integer.parseInt(var3[0]);
+        de = v % 100;
+        abc = v / 100;
+        var1 = abc + de / 60.0 + fghi / (Math.pow(10, 5) * 6);
+
+        return var1;
+    }
 }

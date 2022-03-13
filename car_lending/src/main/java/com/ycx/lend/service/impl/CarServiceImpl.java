@@ -2,7 +2,9 @@ package com.ycx.lend.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.dra.pojo.gps.GpsLog;
 import com.dra.pojo.msg.FormatData;
+import com.dra.utils.GPSMessage;
 import com.ycx.lend.exception.ParamException;
 import com.ycx.lend.mapper.*;
 import com.ycx.lend.pojo.Application;
@@ -123,7 +125,7 @@ public class CarServiceImpl implements CarService {
                 String s = GPSUtils.GpsConvert(carGps.getPositionX(), carGps.getPositionY());
                 String[] location = s.split(",");
                 double distance = GPSUtils.getDistance(Double.parseDouble(location[0]), Double.parseDouble(location[1]), companyLocation.get("longitude"), companyLocation.get("latitude"));
-                if(distance>400){
+                if (distance > 400) {
                     return -9;
                 }
                 applicationMapper.updateIfReturn(application.getApplicationId(), 1);
@@ -176,10 +178,11 @@ public class CarServiceImpl implements CarService {
         HashMap<String, Object> location = JSON.parseObject(json1.toString(), HashMap.class);
         System.out.println(location);
         CarGps carGps = new CarGps();
-        BigDecimal positionX = (BigDecimal) location.get("positionX");
-        BigDecimal positionY = (BigDecimal) location.get("positionY");
+        double positionX = (double) location.get("positionX");
+        double positionY = (double) location.get("positionY");
         carGps.setPositionX(positionX);
         carGps.setPositionY(positionY);
         return carGps;
     }
+
 }

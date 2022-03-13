@@ -14,6 +14,6 @@ import java.util.Date;
 
 @Data
 public class CarGps implements Serializable {
-    private BigDecimal positionX;
-    private BigDecimal positionY;
+    private double positionX;
+    private double positionY;
 }

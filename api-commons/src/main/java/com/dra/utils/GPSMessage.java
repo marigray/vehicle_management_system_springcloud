@@ -2,11 +2,13 @@ package com.dra.utils;
 
 
 import com.dra.pojo.gps.GpsLog;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class GPSMessage {
 
     private final Map<String, String> gpsMessage = new HashMap<>();
@@ -27,14 +29,16 @@ public class GPSMessage {
     public GpsLog analysisPositionMessage(String carId, String gpsId) {
         Date date = new Date();
         String[] var1 = this.gpsMessage.get(FinalValueSet.GNGGA_HEADER).split(",");
+
+
         return new GpsLog(carId, gpsId, date, Double.parseDouble(var1[4]), Double.parseDouble(var1[2]));
     }
 
     //数据清洗
     public static GpsLog dataWash(GpsLog gpsLog) {
         //修正
-        gpsLog.setPositionX(wash(gpsLog.getPositionX()-0.111282));
-        gpsLog.setPositionY(wash(gpsLog.getPositionY())-0.0205663);
+        gpsLog.setPositionX(wash(gpsLog.getPositionX()));
+        gpsLog.setPositionY(wash(gpsLog.getPositionY()));
         return gpsLog;
     }
 

@@ -17,6 +17,7 @@
         <module>eureka-server</module>
         <module>car_lending</module>
         <module>vire</module>
+        <module>Gateway</module>
     </modules>
 
 

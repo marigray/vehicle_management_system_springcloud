@@ -1,25 +1,26 @@
-my:
-  server:
-    port:
-#      tcp: 6666
-      wsPosition: 7777
-      wsSate: 8888
 server:
-  port: 5555
+  port: 5557
 spring:
+  application:
+    name: login
+  artemis:
+    mode: native
+    host: 127.0.0.1
+    port: 61616
+    user: dra
+    password: 123
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-bp129t7yxb1o95tvm2o.mysql.rds.aliyuncs.com:3306/dra?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
-    username: yxydt
-    password: 2545570457@qq
+    url: jdbc:mysql://rm-bp12gjcylbvar819iao.mysql.rds.aliyuncs.com:3306/login?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai
+    username: ycx
+    password: Zjgf6666
     type: com.alibaba.druid.pool.DruidDataSource
+
   redis:
     maxTotal: 1000
     database: 0
-    host: car.qzxydragon.top
-    port: 12012
-    password: 2545570457@qq
-    timeout: 3000
+    host: hadoop100
+    port: 6379
   http:
     encoding:
       enabled: true
@@ -27,7 +28,7 @@ spring:
       charset: UTF-8
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
-  type-aliases-package: com.dra.gps.pojo
+  type-aliases-package: com.dra.pojo.login
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
@@ -37,4 +38,14 @@ mybatis:
       pagehelper: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   level:
-    learning: info
+    learning: debug
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+feign:
+  compression:
+    request:
+      min-request-size: 10240

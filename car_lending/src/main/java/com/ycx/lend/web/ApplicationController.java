@@ -8,6 +8,7 @@ import com.ycx.lend.service.ApplicationService;
 import com.ycx.lend.service.CarService;
 import com.ycx.lend.utils.EmptyChecker;
 import com.ycx.lend.utils.WebCheck;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,6 +120,16 @@ public class ApplicationController {
         }
         List<Application> applications = applicationService.queryApplicationByUser(userId);
         return new FormatData<>(applications);
+    }
+
+    @RequestMapping("/queryByUserAndCar")
+    public FormatData<Object> queryByUserAndCar(@RequestParam("userId") String userId,
+                                                @RequestParam("carId") String carId) throws ParamException {
+        if (EmptyChecker.isAnyOneEmpty(userId,carId)){
+            WebCheck.isError(0);
+        }
+        Application application = applicationService.queryByUserAndCar(userId, carId);
+        return new FormatData<>(application);
     }
 
     /**查询

@@ -204,4 +204,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     public List<Application> queryNotReturnApplication() {
         return applicationMapper.queryNotReturnApplication();
     }
+
+    @Override
+    public Application queryByUserAndCar(String userId, String carId) {
+        return applicationMapper.queryByUserAndCar(userId,carId);
+    }
 }

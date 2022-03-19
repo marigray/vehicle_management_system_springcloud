@@ -42,6 +42,11 @@ public interface ApplicationMapper extends Mapper<Application> {
     @Select("select * from application where car_id=#{carId} and if_return=0")
     Application queryNotReturnByCarId(@Param("carId") String carId);
 
+    @Select("select * from application where car_id=#{carId} and user_id=#{userId}")
+    Application queryByUserAndCar(String userId, String carId);
+
     //查询某时间之前的所有借用申请并审核通过的申请单并排列
     List<Application> queryApplicationByTime(@Param("carId")String carId, @Param("applicationTime") Date applicationTime);
+
+
 }

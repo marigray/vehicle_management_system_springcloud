@@ -2,6 +2,7 @@ package com.ycx.lend.service;
 
 import com.github.pagehelper.Page;
 import com.ycx.lend.pojo.Application;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface ApplicationService {
 
     int updateApplication(Application application);
 
-    Page<Application> queryAllApplication(int pageNum,int pageSize);
+    Page<Application> queryAllApplication(int pageNum, int pageSize);
 
     Application queryApplicationById(String applicationId);
 
@@ -28,4 +29,6 @@ public interface ApplicationService {
 
     //查询未归还的申请
     List<Application> queryNotReturnApplication();
+
+    Application queryByUserAndCar(String userId, String carId);
 }

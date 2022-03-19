@@ -1,6 +1,7 @@
 package com.dra.login.web;
 
 
+import com.dra.annotation.Public;
 import com.dra.login.exception.ParamException;
 import com.dra.login.redis.RedisUtil;
 import com.dra.login.service.RegisterService;
@@ -25,7 +26,7 @@ public class RegisterController {
     private RedisUtil redisUtil;
 
     @RequestMapping(value = "/user.do",method = RequestMethod.POST)
-//    @Public
+    @Public
     public Object userReg(@RequestBody User user, @RequestParam String code) throws ParamException {
         //检测验证码
         String string = redisUtil.getString(FinalValueSet.CH_CODE+":"+user.getEMail(),0);

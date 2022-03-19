@@ -1,5 +1,6 @@
 package com.dra.login.web;
 
+import com.dra.annotation.Public;
 import com.dra.login.exception.ParamException;
 import com.dra.login.service.LoginService;
 import com.dra.utils.ResponseFormat;
@@ -10,7 +11,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/login")
-//@Public
+@Public
 public class LoginController {
 
     @Resource

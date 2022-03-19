@@ -1,6 +1,5 @@
 package com.dra.gps.web;
 
-import com.dra.annotation.Public;
 import com.dra.gps.exception.ParamException;
 import com.dra.gps.service.GPSLogService;
 import com.dra.pojo.gps.GpsLog;
@@ -37,7 +36,6 @@ public class GPSLogController {
         return success;
     }
 
-    @Public
     @RequestMapping("/search.do")
     public Object search(String carId,
                          long date1,

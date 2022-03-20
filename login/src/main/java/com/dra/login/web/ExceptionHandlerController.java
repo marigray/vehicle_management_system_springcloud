@@ -4,8 +4,7 @@ package com.dra.login.web;
 import com.dra.login.exception.ParamException;
 import com.dra.utils.ResponseFormat;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+//@RestControllerAdvice
 public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)

@@ -47,7 +47,7 @@ public class CarGpsController {
         return success;
     }
 
-    @RequestMapping("search.do")
+    @RequestMapping("/search.do")
     public Object search(String carId, int pageNum, int pageSize) throws ParamException{
         Page<CarGps> list = carGpsService.search(carId,pageNum,pageSize);
         return successData.getSuccess(list);

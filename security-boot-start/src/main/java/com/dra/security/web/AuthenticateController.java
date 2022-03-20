@@ -34,17 +34,21 @@ public class AuthenticateController {
         try {
             //调用find
             String s1 = jwtFindInterceptor.preHandle(map);
-
+            log.info("调用find:"+s1);
             if (!s1.equals("true")) {
                 return new FormatData<>(false, 401, s1);
             }
             //调用check
+
             String s2 = jwtCheckInterceptor.preHandle(map);
+            log.info("调用check:"+s2);
             if (!s2.equals("true")) {
                 return new FormatData<>(false, 402, s2);
             }
             //调用power
+
             String s3 = jwtPowerInterceptor.preHandle(map);
+            log.info("调用power"+s3);
             if (!s3.equals("true")) {
                 return new FormatData<>(false, 403, s3);
             }

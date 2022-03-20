@@ -21,6 +21,7 @@ public class PowerCompare {
      */
     public boolean hasPower(String url,Map<String, Object> jwt) {
         UserMessage user = userMessageService.findUser((String) jwt.get("id"), (String) jwt.get("type"));
+        System.out.println(user);
         if (user!=null){
             for (Role role : user.getRoles()) {
                 for (Power power : role.getPowers()) {

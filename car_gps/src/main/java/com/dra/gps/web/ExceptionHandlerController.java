@@ -4,9 +4,10 @@ package com.dra.gps.web;
 import com.dra.gps.exception.ParamException;
 import com.dra.utils.ResponseFormat;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)

@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface RoleMapper {
-    Page<Role> findRole(String id);
+    Page<Role> findRole(@Param("id") String id);
 
     int addRole(Role role);
     int updateRole(Role role);

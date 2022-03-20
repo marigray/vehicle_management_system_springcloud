@@ -1,6 +1,8 @@
 server:
-  port: 4444
+  port: 8002
 spring:
+  application:
+    name: car-lending
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://rm-bp12gjcylbvar819iao.mysql.rds.aliyuncs.com:3306/ycx?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
@@ -9,11 +11,11 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
   redis:
     maxTotal: 1000
-      database: 0
-      host: car.qzxydragon.top
-      port: 12012
-      password: 2545570457@qq
-      timeout: 3000
+    database: 0
+    host: car.qzxydragon.top
+    port: 12012
+    password: 2545570457@qq
+    timeout: 3000
   http:
     encoding:
       enabled: true

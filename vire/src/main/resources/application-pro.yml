@@ -1,14 +1,17 @@
 server:
-  port: 4444
+  port: 12001
 spring:
+  application:
+    name: vire
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-bp129t7yxb1o95tvm2o.mysql.rds.aliyuncs.com:3306/dra?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
-    username: yxydt
-    password: 2545570457@qq
+    url: jdbc:mysql://rm-bp12gjcylbvar819iao.mysql.rds.aliyuncs.com:3306/ycx?charset=utf-8&useUnicode=true&useSSL=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
+    username: ycx
+    password: Zjgf6666
     type: com.alibaba.druid.pool.DruidDataSource
   redis:
     maxTotal: 1000
+    database: 0
     host: car.qzxydragon.top
     port: 12012
     password: 2545570457@qq
@@ -20,7 +23,7 @@ spring:
       charset: UTF-8
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml
-  type-aliases-package: com.dra.msg.pojo
+  type-aliases-package: com.wang.vire.pojo
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
@@ -32,7 +35,9 @@ logging:
   level:
     learning: info
 
-mymail:
-  senderAddress: test_dra@qq.com
-  senderAccount: 查勘车系统服务小组
-  senderPassword: jmpkvjqvesbgeaai
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka

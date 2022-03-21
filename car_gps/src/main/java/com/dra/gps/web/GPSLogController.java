@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @RestController
-@RequestMapping("gps_log")
+@RequestMapping("/gps_log")
 public class GPSLogController {
     @Resource
     private GPSLogService gpsLogService;

@@ -5,9 +5,9 @@
     <resultMap id="power" type="Power">
         <id column="power_id" property="powerId"/>
         <result column="power_type" property="powerType"/>
-        <collection property="elements" column="power_id" select="com.dra.dao.ElementMapper.findElement"/>
-        <collection property="files" column="power_id" select="com.dra.dao.FileMapper.findFile"/>
-        <collection property="menus" column="power_id" select="com.dra.dao.MenuMapper.findMenu"/>
+        <collection property="elements" column="power_id" select="com.dra.login.dao.ElementMapper.findElement"/>
+        <collection property="files" column="power_id" select="com.dra.login.dao.FileMapper.findFile"/>
+        <collection property="menus" column="power_id" select="com.dra.login.dao.MenuMapper.findMenu"/>
     </resultMap>
 
 

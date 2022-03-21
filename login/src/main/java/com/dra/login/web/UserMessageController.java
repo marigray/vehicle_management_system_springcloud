@@ -17,7 +17,9 @@ public class UserMessageController {
     private UserMessageService userMessageService;
     @RequestMapping(value = "/findUser",method = RequestMethod.GET)
     public UserMessage findUser(String id, String type){
+        System.out.println("id:"+id+"\ntype:"+type);
         log.info("进入findUser");
+        System.out.println( userMessageService.findUser(id,type));
         return userMessageService.findUser(id,type);
     }
 }

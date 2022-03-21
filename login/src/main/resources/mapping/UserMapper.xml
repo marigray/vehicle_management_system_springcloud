@@ -6,7 +6,7 @@
     <resultMap id="userMap" type="UserMessage">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
-        <collection property="roles" column="id" select="com.dra.dao.RoleMapper.findRole"/>
+        <collection property="roles" column="id" select="com.dra.login.dao.RoleMapper.findRole"/>
     </resultMap>
     <update id="updateUser" parameterType="User">
         update user

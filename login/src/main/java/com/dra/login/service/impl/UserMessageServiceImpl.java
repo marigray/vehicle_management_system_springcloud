@@ -30,10 +30,10 @@ public class UserMessageServiceImpl implements UserMessageService {
 //        ApplicationContext context =
 //                new ClassPathXmlApplicationContext("applicationContext-tx.xml");
 //        UserMessageServiceImpl checkUserServiceImpl = (UserMessageServiceImpl) context.getBean("userMessageServiceImpl");
-//        System.out.println(checkUserServiceImpl.findUser("223","background"));
-//
-//
-//
-//
+//        System.out.println(checkUserServiceImpl.findUser("1","background"));
+
+
+
+
 //    }
 }

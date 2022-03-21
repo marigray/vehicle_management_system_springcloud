@@ -6,7 +6,7 @@
     <resultMap id="roleMap" type="Role">
         <id column="role_id" property="roleId"/>
         <result column="role_name" property="roleName"/>
-        <collection property="powers" column="role_id" select="com.dra.dao.PowerMapper.findPower"/>
+        <collection property="powers" column="role_id" select="com.dra.login.dao.PowerMapper.findPower"/>
     </resultMap>
     <insert id="addRole">
         insert into role (role_id, role_name)
@@ -38,8 +38,6 @@
     <select id="searchAllRole" resultType="Role">
         select role_id roleId, role_name roleName
         from role
-
-
     </select>
 
 </mapper>

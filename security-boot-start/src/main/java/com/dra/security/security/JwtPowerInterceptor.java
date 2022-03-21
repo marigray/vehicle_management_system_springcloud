@@ -38,10 +38,12 @@ public class JwtPowerInterceptor {
         //        System.out.println("==================JwtPowerInterceptor已拦截===============");
         HashMap<String, Object> jwt = checkTokenService.getTokenMessage(map.get("Jwt"));
         System.out.println("jwt :" + jwt);
+        log.info("无身份信息检测");
         //无身份信息
         if (jwt.get("type") == null) {
             return MESSAGE;
         }
+        log.info("普通用户身份检测");
         //普通用户身份
         if (jwt.get("type").equals("user")) {
             if (Boolean.parseBoolean(map.get("isUser"))) {
@@ -51,10 +53,12 @@ public class JwtPowerInterceptor {
             }
 
         }
+        log.info("后台用户身份检测");
         //后台用户身份
         if (Boolean.parseBoolean(map.get("isUser"))) {
             return String.valueOf(true);
         }
+        log.info("其他情况检测");
         //其他情况 需要确定当前用户是否具有权限访问非公开非用户接口
         if (!powerCompare.hasPower(map.get("url"), jwt)) {
             return MESSAGE;

@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.ArrayList;
 @Mapper
 public interface PowerMapper {
-    Page<Power> findPower(String roleID);
+    Page<Power> findPower(@Param("roleId") String roleId);
 
     int addPower(Power power);
     int updatePower(Power power);

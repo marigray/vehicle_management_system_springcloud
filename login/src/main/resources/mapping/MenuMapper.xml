@@ -23,8 +23,8 @@
     </update>
     <delete id="deleteMenu">
         delete
-        from file
-        where file_id = #{fileId}
+        from menu
+        where file_id = #{menuId}
     </delete>
     <select id="searchMenuById" resultType="Menu">
         select menu_id menuId, menu_name menuName, menu_url menuUrl, menu_parent_id menuParentId

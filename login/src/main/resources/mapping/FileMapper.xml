@@ -18,7 +18,7 @@
         where file_id=#{fileId}
     </update>
     <delete id="deleteFile">
-        delete from file where file_id=#{id}
+        delete from file where file_id=#{fileId}
     </delete>
 
 

@@ -28,7 +28,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("进入拦截器");
-        log.info(handler.toString());
+        log.info("handler"+handler.toString());
         response.setContentType("application/json;charset=UTF-8");
         Map<String, String> annotationMessage = AuthAnnotation.getAnnotationMessage(request, response, handler);
         log.info("推出拦截器");

@@ -71,7 +71,7 @@ public class PowerAssignmentController {
 
     @RequestMapping(value = "/deleteRoleFromUser.do")
     public Object deleteRoleFromUser(String id, String roleId)  throws ParamException {
-        int i = powerAssignmentService.deletePowerFromRole(id, roleId);
+        int i = powerAssignmentService.deleteRoleFromUser(id, roleId);
         isError(i);
         return success;
     }

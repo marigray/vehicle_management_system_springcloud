@@ -122,7 +122,7 @@ public class ApplicationController {
         return new FormatData<>(applications);
     }
 
-    @RequestMapping("/queryByUserAndCar")
+    @RequestMapping("/queryByUserAndCar.do")
     public FormatData<Object> queryByUserAndCar(@RequestParam("userId") String userId,
                                                 @RequestParam("carId") String carId) throws ParamException {
         if (EmptyChecker.isAnyOneEmpty(userId,carId)){

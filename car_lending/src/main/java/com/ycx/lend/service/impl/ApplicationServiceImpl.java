@@ -55,12 +55,20 @@ public class ApplicationServiceImpl implements ApplicationService {
                 (application.getType() != 1 && EmptyChecker.isEmpty(application.getCarId()))) {
             return 0;
         }
-        /*生成主键*/
-        application.setApplicationId(ServiceUtils.SetPrimaryKey(idService.getMaxId("application", "application_id")));
 
         /*判断申请类型是否存在于关联表中*/
         if (EmptyChecker.isEmpty(applicationTypeMapper.selectByPrimaryKey(application.getType()))) {
             return -2;
+        }
+
+        /*生成主键*/
+        application.setApplicationId(ServiceUtils.SetPrimaryKey(idService.getMaxId("application", "application_id")));
+
+        //查询是否重复提交申请
+        for (Application application1 : applicationMapper.queryByUserAndCar(application.getUserId(), application.getCarId())) {
+            if (application1.getIfReturn() != 1) {
+                return -5;
+            }
         }
         /*------------------------------------------------------------------------------------------------*/
         int insert = -4;
@@ -175,7 +183,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         //存放未修改前申请单
         Application application1 = applicationMapper.selectByPrimaryKey(application.getApplicationId());
         //如果申请已经开始审核，不允许修改
-        if (application1.getAuditStatus() != 0||!application.getUserId().equals(application1.getUserId())) {
+        if (application1.getAuditStatus() != 0 || !application.getUserId().equals(application1.getUserId())) {
             return -7;
         }
         return applicationMapper.updateByPrimaryKeySelective(application);
@@ -206,7 +214,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Application queryByUserAndCar(String userId, String carId) {
-        return applicationMapper.queryByUserAndCar(userId,carId);
+    public List<Application> queryByUserAndCar(String userId, String carId) {
+        return applicationMapper.queryByUserAndCar(userId, carId);
     }
 }

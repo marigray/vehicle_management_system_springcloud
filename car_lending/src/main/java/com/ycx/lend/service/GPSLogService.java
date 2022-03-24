@@ -5,6 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,6 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "CAR-GPS")
 public interface GPSLogService {
     @RequestMapping("/gps_log/search.do")
-    public Object search(@RequestParam("carId") String carId,@RequestParam("date1") long date1,@RequestParam("date2") long date2,
-                         @RequestParam("pageNum") int pageNum,@RequestParam("pageSize") int pageSize) throws ParamException;
+    public Object search(@RequestParam("carId") String carId, @RequestParam("date1") long date1, @RequestParam("date2") long date2,
+                         @RequestParam("pageNum") int pageNum, @RequestParam("pageSize") int pageSize, @RequestHeader(name = "jwt", required = true) String jwt) throws ParamException;
 }

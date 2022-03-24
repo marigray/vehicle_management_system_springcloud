@@ -1,7 +1,7 @@
 package com.ycx.lend.service.impl;
 
 import com.ycx.lend.mapper.SpecialConfMapper;
-import com.ycx.lend.service.CompanyService;
+import com.ycx.lend.service.ConfigService;
 import com.ycx.lend.utils.EmptyChecker;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +14,13 @@ import java.util.HashMap;
  * @Description
  */
 @Service
-public class CompanyServiceImpl implements CompanyService {
+public class ConfigServiceImpl implements ConfigService {
     @Resource
     SpecialConfMapper specialConfMapper;
 
     @Override
     public int setCompanyLocation(String Location) {
-        if (EmptyChecker.isEmpty(Location)){
+        if (EmptyChecker.isEmpty(Location)) {
             return 0;
         }
         return specialConfMapper.setCompanyLocation(Location);
@@ -36,5 +36,17 @@ public class CompanyServiceImpl implements CompanyService {
         Double i2 = Double.valueOf(split[1]);
         hashMap.put("latitude", i2);
         return hashMap;
+    }
+
+    @Override
+    public int setJwt(String jwt) {
+        if (EmptyChecker.isEmpty(jwt)) {
+            return 0;
+        }
+        int i = specialConfMapper.setJwt(jwt);
+        if (i < 0) {
+            return -4;
+        }
+        return i;
     }
 }

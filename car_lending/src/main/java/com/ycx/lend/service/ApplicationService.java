@@ -30,5 +30,5 @@ public interface ApplicationService {
     //查询未归还的申请
     List<Application> queryNotReturnApplication();
 
-    Application queryByUserAndCar(String userId, String carId);
+    List<Application> queryByUserAndCar(String userId, String carId);
 }

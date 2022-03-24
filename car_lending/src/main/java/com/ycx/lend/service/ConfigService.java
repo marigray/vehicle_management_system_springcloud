@@ -8,10 +8,13 @@ import java.util.HashMap;
  * @Description
  */
 
-public interface CompanyService {
+public interface ConfigService {
     //设置公司位置
     public int setCompanyLocation(String Location);
 
     //获取公司位置经纬度
     public  HashMap<String,Double> getCompanyLocation();
+
+    //设置jwt
+    public int setJwt(String jwt);
 }

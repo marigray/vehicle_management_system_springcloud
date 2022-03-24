@@ -2,7 +2,7 @@ package com.ycx.lend.web;
 
 import com.ycx.lend.exception.ParamException;
 import com.dra.pojo.msg.FormatData;
-import com.ycx.lend.service.CompanyService;
+import com.ycx.lend.service.ConfigService;
 import com.ycx.lend.utils.WebCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,16 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description
  */
 @RestController
-@RequestMapping("/company")
-public class CompanyController {
+@RequestMapping("/config")
+public class ConfigController {
     @Autowired
-    CompanyService companyService;
+    ConfigService configService;
 
     @RequestMapping("/setLocation.do")
     public FormatData<Object> setLocation(@RequestParam("location")String location) throws ParamException {
-        int i = companyService.setCompanyLocation(location);
+        int i = configService.setCompanyLocation(location);
         WebCheck.isError(i);
         return new FormatData<>(i);
     }
 
+    @RequestMapping("/setJwt.do")
+    public FormatData<Object> setJwt(@RequestParam("jwt")String jwt) throws ParamException {
+        int i = configService.setJwt(jwt);
+        WebCheck.isError(i);
+        return new FormatData<>(i);
+    }
 }

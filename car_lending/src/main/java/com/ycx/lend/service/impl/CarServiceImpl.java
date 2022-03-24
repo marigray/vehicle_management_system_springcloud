@@ -2,17 +2,12 @@ package com.ycx.lend.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.dra.pojo.gps.GpsLog;
 import com.dra.pojo.msg.FormatData;
-import com.dra.utils.GPSMessage;
 import com.ycx.lend.exception.ParamException;
 import com.ycx.lend.mapper.*;
-import com.ycx.lend.pojo.Application;
-import com.ycx.lend.pojo.Car;
-import com.ycx.lend.pojo.CarChange;
-import com.ycx.lend.pojo.CarGps;
+import com.ycx.lend.pojo.*;
 import com.ycx.lend.service.CarService;
-import com.ycx.lend.service.CompanyService;
+import com.ycx.lend.service.ConfigService;
 import com.ycx.lend.service.GPSLogService;
 import com.ycx.lend.utils.EmptyChecker;
 import com.ycx.lend.utils.GPSUtils;
@@ -21,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,9 +40,11 @@ public class CarServiceImpl implements CarService {
     @Autowired
     ApplicationMapper applicationMapper;
     @Autowired
-    CompanyService companyService;
+    ConfigService configService;
     @Autowired
     GPSLogService gpsLogService;
+    @Autowired
+    SpecialConfMapper specialConfMapper;
 
 
     @Override
@@ -117,11 +113,16 @@ public class CarServiceImpl implements CarService {
                 }
                 //判断汽车位置是否在公司内部
                 //获取公司定位
-                HashMap<String, Double> companyLocation = companyService.getCompanyLocation();
+                HashMap<String, Double> companyLocation = configService.getCompanyLocation();
                 //获取汽车定位
                 long LongTime = date.getTime();
-                JSON carLocation = (JSON) gpsLogService.search(carId, LongTime - 1, LongTime + 1, 1, 1);
-                CarGps carGps = JsonToCarGps(carLocation);
+                JSON carLocation = (JSON) gpsLogService.search(carId, LongTime - 1, LongTime + 1, 1, 1, specialConfMapper.getJwt());
+                FormatData formatData = carLocation.toJavaObject(FormatData.class);
+                JSONArray data = (JSONArray) formatData.getData();
+                if (EmptyChecker.isEmpty(data)) {
+                    return -2;
+                }
+                CarGps carGps = FormatDataToCarGps(formatData, data);
                 String s = GPSUtils.GpsConvert(carGps.getPositionX(), carGps.getPositionY());
                 String[] location = s.split(",");
                 double distance = GPSUtils.getDistance(Double.parseDouble(location[0]), Double.parseDouble(location[1]), companyLocation.get("longitude"), companyLocation.get("latitude"));
@@ -171,9 +172,7 @@ public class CarServiceImpl implements CarService {
         return false;
     }
 
-    private CarGps JsonToCarGps(JSON json) {
-        FormatData formatData = json.toJavaObject(FormatData.class);
-        JSONArray data = (JSONArray) formatData.getData();
+    private CarGps FormatDataToCarGps(FormatData formatData, JSONArray data) {
         JSON json1 = (JSON) data.get(0);
         HashMap<String, Object> location = JSON.parseObject(json1.toString(), HashMap.class);
         System.out.println(location);

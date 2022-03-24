@@ -2,7 +2,6 @@ package com.dra.login.service.impl;
 
 import com.dra.login.dao.BackgroundMapper;
 import com.dra.login.dao.PowerAssignmentMapper;
-import com.dra.login.dao.RoleMapper;
 import com.dra.login.dao.UserMapper;
 import com.dra.login.service.PowerAssignmentService;
 import com.dra.pojo.login.*;
@@ -19,8 +18,8 @@ public class PowerAssignmentServiceImpl implements PowerAssignmentService {
     @Resource
     private PowerAssignmentMapper powerAssignmentMapper;
 
-    @Resource
-    private RoleMapper roleMapper;
+//    @Resource
+//    private RoleMapper roleMapper;
     @Resource
     private UserMapper userMapper;
 

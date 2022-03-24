@@ -34,6 +34,7 @@ public class GPSLogServiceImpl implements GPSLogService {
                                     int pageNum,
                                     int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
+        System.out.println(gpsLogMapper.search(carId, date1, date2));
         return gpsLogMapper.search(carId, date1, date2);
     }
 }

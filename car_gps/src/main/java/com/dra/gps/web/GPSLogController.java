@@ -4,6 +4,7 @@ import com.dra.gps.exception.ParamException;
 import com.dra.gps.service.GPSLogService;
 import com.dra.pojo.gps.GpsLog;
 import com.dra.utils.ResponseFormat;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/gps_log")
+@Slf4j
 public class GPSLogController {
     @Resource
     private GPSLogService gpsLogService;
@@ -45,8 +47,14 @@ public class GPSLogController {
         if (carId==null||carId.equals(""))
             throw new ParamException();
         Date dateStart = new Date(date1);
+
         Date dateEnd = new Date(date2);
+
+        log.info(dateStart.toString());
+        log.info(dateEnd.toString());
+
         ArrayList<GpsLog> list = gpsLogService.search(carId,dateStart,dateEnd,pageNum,pageSize);
+
         return successData.getSuccess(list);
     }
 }

@@ -128,7 +128,7 @@ public class ApplicationController {
         if (EmptyChecker.isAnyOneEmpty(userId,carId)){
             WebCheck.isError(0);
         }
-        Application application = applicationService.queryByUserAndCar(userId, carId);
+        List<Application> application = applicationService.queryByUserAndCar(userId, carId);
         return new FormatData<>(application);
     }
 

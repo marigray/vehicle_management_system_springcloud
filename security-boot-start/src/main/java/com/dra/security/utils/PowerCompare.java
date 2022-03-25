@@ -27,8 +27,12 @@ public class PowerCompare {
                 for (Power power : role.getPowers()) {
                     if (url.endsWith("do")) {
                         for (Element element : power.getElements()) {
+
                             if (element.getElementEncode().equals(url))
+                            {
                                 return true;
+                            }
+                            System.out.println(element.getElementEncode()+":false\n");
                         }
                     } else {
                         for (File file : power.getFiles()) {

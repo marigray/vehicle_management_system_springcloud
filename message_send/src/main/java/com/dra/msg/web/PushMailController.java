@@ -15,7 +15,7 @@ public class PushMailController {
     @Resource
     private PushMailService pushMailService;
 
-    @RequestMapping(value = "/addpushmail",method = RequestMethod.POST)
+    @RequestMapping(value = "/addpushmail.do",method = RequestMethod.POST)
     public FormatData<Object> addPushMail(PushMail pushMail) throws ParamException {
         int i = pushMailService.addPushMail(pushMail);
         if (i==0)
@@ -23,7 +23,7 @@ public class PushMailController {
         return new FormatData<>(i,200,"success");
     }
 
-    @RequestMapping(value = "/delpushmail",method = RequestMethod.GET)
+    @RequestMapping(value = "/delpushmail.do",method = RequestMethod.GET)
     public FormatData<Object> delPushMail(String id) throws ParamException {
         int i = pushMailService.delPushMail(id);
         if (i==0)
@@ -31,7 +31,7 @@ public class PushMailController {
         return new FormatData<>(i,200,"success");
     }
 
-    @RequestMapping(value = "/uppushmail",method = RequestMethod.POST)
+    @RequestMapping(value = "/uppushmail.do",method = RequestMethod.POST)
     public FormatData<Object> updatePushMail(PushMail pushMail)  throws ParamException {
 
         int i = pushMailService.updatePushMail(pushMail);
@@ -40,7 +40,7 @@ public class PushMailController {
         return new FormatData<>(i,200,"success");
     }
 
-    @RequestMapping(value = "/selpushmail",method = RequestMethod.GET)
+    @RequestMapping(value = "/selpushmail.do",method = RequestMethod.GET)
     public FormatData<Object> selectAll() {
         return new FormatData<>(pushMailService.selectAll(),200,"success");
     }

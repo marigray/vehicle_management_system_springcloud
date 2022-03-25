@@ -61,6 +61,7 @@ public class JwtPowerInterceptor {
         log.info("其他情况检测");
         //其他情况 需要确定当前用户是否具有权限访问非公开非用户接口
         if (!powerCompare.hasPower(map.get("url"), jwt)) {
+            log.info("无权限");
             return MESSAGE;
         }
 

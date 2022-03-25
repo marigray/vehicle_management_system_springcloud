@@ -15,7 +15,7 @@ public class SendMailController {
     @Resource
     public MailWorkService mailWorkService;
 
-    @RequestMapping("/sendcode")
+    @RequestMapping("/sendcode.do")
     public FormatData<Object> sendCheckCode(@RequestParam String to) throws Exception {
         Object o = mailWorkService.sendCheckCode(to);
         if (o==null)

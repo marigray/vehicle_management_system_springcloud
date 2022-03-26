@@ -180,8 +180,7 @@ public class RepairApplyServiceImpl implements RepairApplyService {
             return -3;
         }
         //判断申请单是否是未审核
-        if(repairApplyMapper.selectByPrimaryKey(repairApply.getApplyId()).getApplyStatus()!=0&&
-                repairApplyMapper.selectByPrimaryKey(repairApply.getApplyId()).getApplyStatus()!=3){
+        if(repairApplyMapper.selectByPrimaryKey(repairApply.getApplyId()).getApplyStatus()!=0){
             return -6;
         }
 //        RepairApply repairApply1 = new RepairApply();

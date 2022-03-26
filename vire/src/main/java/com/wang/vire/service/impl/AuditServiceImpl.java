@@ -198,6 +198,9 @@ public class AuditServiceImpl implements AuditService {
         if (audit.equals(auditSelByKey1)) {
             return -5;
         }
+        if(EmptyChecker.isEmpty(auditSelByKey1)){
+            return -2;
+        }
         //进行状态修改
         Object auditUpdSelective = JsonUtils.JsonToInt(wangService.auditUpdSelective(audit));
         int changeStatus = (int) auditUpdSelective;

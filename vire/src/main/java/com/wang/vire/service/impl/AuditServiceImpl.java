@@ -190,16 +190,18 @@ public class AuditServiceImpl implements AuditService {
         audit.setAuditId(auditId);
         audit.setAuditStatus(status);
         audit.setAuditTime(date);
+        //查看状态值是否存在
         if (EmptyChecker.isEmpty(wangService.auditStatusSelByKey(status))) {
             return -2;
         }
         Object auditSelByKey = JsonUtils.JsonToPojo(wangService.auditSelByKey(auditId), Audit.class);
         Audit auditSelByKey1 = (Audit) auditSelByKey;
-        if (audit.equals(auditSelByKey1)) {
-            return -5;
-        }
+
         if(EmptyChecker.isEmpty(auditSelByKey1)){
             return -2;
+        }
+        if (auditSelByKey1.getAuditStatus()==status) {
+            return -5;
         }
         //进行状态修改
         Object auditUpdSelective = JsonUtils.JsonToInt(wangService.auditUpdSelective(audit));

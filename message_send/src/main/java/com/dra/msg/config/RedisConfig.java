@@ -26,6 +26,6 @@ public class RedisConfig {
     @Bean  //这个注解注入工厂的名称是方法名
     public JedisPool jedisPool(){
         JedisPoolConfig jedisPoolConfig = jedisPoolConfig();
-        return new JedisPool(jedisPoolConfig,host,port);
+        return new JedisPool(jedisPoolConfig,host,port,timeout,password);
     }
 }

@@ -18,9 +18,10 @@ spring:
 
   redis:
     maxTotal: 1000
-    database: 0
-    host: hadoop100
-    port: 6379
+    host: redis.draso.top
+    port: 16379
+    password: 123456
+    timeout: 3000
   http:
     encoding:
       enabled: true

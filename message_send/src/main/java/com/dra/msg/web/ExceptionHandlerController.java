@@ -3,9 +3,8 @@ package com.dra.msg.web;
 import com.dra.msg.exception.ParamException;
 import com.dra.pojo.msg.FormatData;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)

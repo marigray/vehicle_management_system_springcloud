@@ -18,9 +18,9 @@ spring:
   redis:
     maxTotal: 1000
     database: 0
-    host: car.qzxydragon.top
-    port: 12012
-    password: 2545570457@qq
+    host: redis.draso.top
+    port: 16379
+    password: 123456
     timeout: 3000
   http:
     encoding:

@@ -11,7 +11,7 @@ public class RedisUtil {
     @Resource
     private JedisPool jedisPool;
     private Jedis jedis;
-    private final String PASSWORD = "2545570457@qq";
+    private final String PASSWORD = "123456";
     public void getJedis(){
         this.jedis = jedisPool.getResource();
     }
@@ -20,7 +20,7 @@ public class RedisUtil {
         if (this.jedis==null){
             getJedis();
         }
-//        this.jedis.auth(this.PASSWORD);
+        this.jedis.auth(this.PASSWORD);
     }
 
     public Long setSET(String key, String id, Object object) {

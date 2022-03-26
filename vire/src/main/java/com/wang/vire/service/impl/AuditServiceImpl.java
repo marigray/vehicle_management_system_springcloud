@@ -209,7 +209,10 @@ public class AuditServiceImpl implements AuditService {
         //更新状态分类
         if (status == 1) {
             //如果申请表中状态未未审核，则将状态同步更新到申请表
-            if (repairApplyMapper.selectByPrimaryKey(applicationId).getApplyStatus() == 0) {
+            RepairApply repairApply = repairApplyMapper.selectByPrimaryKey(applicationId);
+            if(EmptyChecker.isEmpty(repairApply))
+                return -2;
+            if (repairApply.getApplyStatus() == 0) {
                 int i = repairApplyMapper.updateAuditStatus(applicationId, status);
                 if (i < 0)
                     return i - 10;

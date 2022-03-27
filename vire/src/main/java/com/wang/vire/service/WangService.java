@@ -34,7 +34,9 @@ public interface WangService {
     @RequestMapping("/wang/auditEndSelNumOfEveryAuditor.do")
     public Object auditEndSelNumOfEveryAuditor();
     //List<HashMap<String, Object>>
-    @RequestMapping("/wang/auditEndInsertSelective.do")
+    @RequestMapping("/wang/queryLessNumAudit.do")
+    public Object queryLessNumAudit();
+    @RequestMapping(value="/wang/auditEndInsertSelective.do",consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object auditEndInsertSelective(@RequestBody AuditEnd auditEnd);
 
     @RequestMapping("/wang/auditEndDelByKey.do")

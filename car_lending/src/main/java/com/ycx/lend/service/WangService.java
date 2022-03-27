@@ -22,6 +22,7 @@ public interface WangService {
     AuditEnd auditEndSelByApplicationId(String applicationId);
     List<AuditEnd> auditEndSelByAuditorId(String auditorId);
     List<HashMap<String, Object>> auditEndSelNumOfEveryAuditor();
+    String queryLessNumAudit();
     int auditEndInsertSelective(AuditEnd auditEnd);
     int auditEndDelByKey(String auditId);
     int auditEndUpdSelective(AuditEnd auditEnd);

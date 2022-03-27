@@ -71,4 +71,14 @@ public class JsonUtils {
         }
         return o2;
     }
+    public static String JsonToString(Object param){
+        JSON param1 = (JSON) param;
+        FormatData o = param1.toJavaObject(FormatData.class);
+        Object o1 = (o.getData());
+        String o2 = null;
+        if(EmptyChecker.notEmpty(o1)){
+            o2 =(String) o1;
+        }
+        return o2;
+    }
 }

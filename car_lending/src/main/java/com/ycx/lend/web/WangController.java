@@ -57,6 +57,12 @@ public class WangController {
         return new FormatData<>(hashMaps);
     }
 
+    @RequestMapping("/queryLessNumAudit.do")
+    public Object queryLessNumAudit(){
+        String s = wangService.queryLessNumAudit();
+        return new FormatData<>(s);
+    }
+
     //添加终审单
     @RequestMapping("/auditEndInsertSelective.do")
     public Object auditEndInsertSelective(@RequestBody AuditEnd auditEnd){

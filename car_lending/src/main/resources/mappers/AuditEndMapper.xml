@@ -9,4 +9,11 @@
         where a.auditor_type = 1
         group by a.auditor_id
     </select>
+    <select id="queryLessNumAudit" resultType="String">
+        select a.auditor_id
+        from audit_end a,auditor b
+        where a.auditor_id=b.auditor_id and b.auditor_type=1
+        group by a.auditor_id
+        order by count(*) desc limit 1
+    </select>
 </mapper>

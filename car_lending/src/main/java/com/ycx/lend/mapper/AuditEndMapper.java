@@ -32,6 +32,8 @@ public interface AuditEndMapper extends Mapper<AuditEnd> {
     //查询每个终审员被分配多少申请单
     List<HashMap<String, Object>> queryAuditOfEndAuditor();
 
+    String queryLessNumAudit();
+
     @Delete("delete from audit_end where application_id=#{applicationId}")
     int delByApplicationId(@Param("applicationId")String applicationId);
 

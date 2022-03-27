@@ -2,7 +2,7 @@ package com.wang.vire.mapper;
 
 import com.wang.vire.pojo.RepairApply;
 import com.wang.vire.pojo.Repairer;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;

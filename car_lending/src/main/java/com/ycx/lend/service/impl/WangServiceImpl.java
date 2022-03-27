@@ -60,6 +60,11 @@ public class WangServiceImpl implements WangService {
     }
 
     @Override
+    public String queryLessNumAudit() {
+        return auditEndMapper.queryLessNumAudit();
+    }
+
+    @Override
     public int auditEndInsertSelective(AuditEnd auditEnd) {
         return auditEndMapper.insertSelective(auditEnd);
     }

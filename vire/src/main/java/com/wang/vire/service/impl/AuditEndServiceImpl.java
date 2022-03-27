@@ -81,7 +81,7 @@ public class AuditEndServiceImpl implements AuditEndService {
         auditEnd.setAuditId(this.randomNum());
 
         HashMap<String, Object> h1 = new HashMap<>();
-        h1.put("auditCount", 1000000);
+//        h1.put("auditCount", 1000000);
 
         //查找没有任务的审核员 分配审核
         Object queryEndAuditorId = JsonUtils.JsonToListString(wangService.queryEndAuditorId());
@@ -97,16 +97,19 @@ public class AuditEndServiceImpl implements AuditEndService {
         }
         //查找任务最少的终审员 分配审核
         if (EmptyChecker.isEmpty(h1.get("auditorId"))) {
-            Object auditEndSelNumOfEveryAuditor = JsonUtils.JsonToListPojo(wangService.auditEndSelNumOfEveryAuditor(), HashMap.class);
-            List<HashMap<String, Object>> auditEndSelNumOfEveryAuditors = (List<HashMap<String, Object>>) auditEndSelNumOfEveryAuditor;
-            for (HashMap<String, Object> hashMap : auditEndSelNumOfEveryAuditors) {
-                int auditCount = ServiceUtils.NumberToInt(hashMap.get("auditCount"));
-                Object auditorId = hashMap.get("auditorId");
-                if (auditCount < (Integer) h1.get("auditCount")) {
-                    h1.put("auditorId", auditorId);
-                    h1.put("auditCount", auditCount);
-                }
-            }
+//            Object auditEndSelNumOfEveryAuditor = JsonUtils.JsonToListPojo(wangService.auditEndSelNumOfEveryAuditor(), HashMap.class);
+//            List<HashMap<String, Object>> auditEndSelNumOfEveryAuditors = (List<HashMap<String, Object>>) auditEndSelNumOfEveryAuditor;
+//            for (HashMap<String, Object> hashMap : auditEndSelNumOfEveryAuditors) {
+//                int auditCount = ServiceUtils.NumberToInt(hashMap.get("auditCount"));
+//                Object auditorId = hashMap.get("auditorId");
+//                if (auditCount < (Integer) h1.get("auditCount")) {
+//                    h1.put("auditorId", auditorId);
+//                    h1.put("auditCount", auditCount);
+//                }
+//            }
+            Object stringClass = JsonUtils.JsonToString(wangService.queryLessNumAudit());
+            String stringClass1=(String)stringClass;
+            h1.put("auditorId", stringClass1);
         }
         //如果没有审核员信息被存入，那么随机分配给一个终审员
 //        if (EmptyChecker.isEmpty(h1.get("auditorId"))) {
@@ -121,7 +124,7 @@ public class AuditEndServiceImpl implements AuditEndService {
 ////        }
         //过滤完成，进行赋值
         auditEnd.setAuditorId((String) h1.get("auditorId"));
-        Object auditEndInsertSelective = JsonUtils.JsonToPojo(wangService.auditEndInsertSelective(auditEnd), int.class);
+        Object auditEndInsertSelective = JsonUtils.JsonToInt(wangService.auditEndInsertSelective(auditEnd));
         int auditEndInsertSelective1 = (int) auditEndInsertSelective;
         return auditEndInsertSelective1;
     }

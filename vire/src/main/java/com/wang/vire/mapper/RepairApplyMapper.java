@@ -2,9 +2,9 @@ package com.wang.vire.mapper;
 
 import com.github.pagehelper.Page;
 import com.wang.vire.pojo.RepairApply;
-import io.lettuce.core.dynamic.annotation.Param;
+
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -28,5 +28,5 @@ public interface RepairApplyMapper extends Mapper<RepairApply> {
     List<String> queryAllApplicationId();
     //更改维修申请单状态
 //    @Update("update repair_apply set apply_status = #{applyStatus} where apply_id = #{applyId}")
-    int updateAuditStatus(@Param("applyId") String applyId,int applyStatus);
+    int updateAuditStatus(@Param("applyId") String applyId,@Param("applyStatus") int applyStatus);
 }

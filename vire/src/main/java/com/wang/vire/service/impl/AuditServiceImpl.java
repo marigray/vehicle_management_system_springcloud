@@ -14,6 +14,7 @@ import com.wang.vire.utils.ServiceUtils;
 import com.ycx.lend.pojo.Audit;
 import com.ycx.lend.pojo.AuditEnd;
 import com.ycx.lend.pojo.Auditor;
+import com.ycx.lend.pojo.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -191,12 +192,13 @@ public class AuditServiceImpl implements AuditService {
         audit.setAuditStatus(status);
         audit.setAuditTime(date);
         //查看状态值是否存在
-        if (EmptyChecker.isEmpty(wangService.auditStatusSelByKey(status))) {
-            return -2;
-        }
+//        Object statusClass = JsonUtils.JsonToPojo(wangService.auditStatusSelByKey(status), Status.class);
+//        Status auditStatusSelByKey=(Status)statusClass;
+//        if (EmptyChecker.isEmpty(auditStatusSelByKey)) {
+//            return -2;
+//        }
         Object auditSelByKey = JsonUtils.JsonToPojo(wangService.auditSelByKey(auditId), Audit.class);
         Audit auditSelByKey1 = (Audit) auditSelByKey;
-
         if(EmptyChecker.isEmpty(auditSelByKey1)){
             return -2;
         }
@@ -245,7 +247,7 @@ public class AuditServiceImpl implements AuditService {
             Integer notPass = (Integer) auditSelNotPassedCountByApplicationId;
 //            Integer notPass = wangService.auditSelNotPassedCountByApplicationId(applicationId);
             if (notPass != null && notPass >= 2) {
-                int i = repairApplyMapper.updateAuditStatus(applicationId, status);
+                int i = repairApplyMapper.updateAuditStatus(applicationId,3);
                 if (i < 0)
                     return i - 10;
             }

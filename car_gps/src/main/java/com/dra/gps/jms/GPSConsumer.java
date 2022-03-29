@@ -79,6 +79,7 @@ public class GPSConsumer {
             gpsLog = GPSMessage.analysisMessage(gpsMsg).analysisPositionMessage(carId, id_replace);;
         }catch (Exception e){
             log.error("数据为空");
+
             return;
         }
 

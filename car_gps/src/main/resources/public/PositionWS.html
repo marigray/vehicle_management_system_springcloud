@@ -20,15 +20,15 @@
     var marker //标志
     var ws
     AMapLoader.load({
-        "key": "dra_gps",              // 申请好的Web端开发者Key，首次调用 load 时必填
-        "version": "1.4.15",   // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+        "key": "26389cfbeac2311ac5b4ed40b5d3c326",              // 申请好的Web端开发者Key，首次调用 load 时必填
+        "version": "2.0",   // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
         "plugins": [],           // 需要使用的的插件列表，如比例尺'AMap.Scale'等
         "AMapUI": {             // 是否加载 AMapUI，缺省不加载
             "version": '1.1',   // AMapUI 缺省 1.1
             "plugins":['overlay/SimpleMarker'],       // 需要加载的 AMapUI ui插件
         },
         "Loca":{                // 是否加载 Loca， 缺省不加载
-            "version": '1.3.2'  // Loca 版本，缺省 1.3.2
+            "version": '2.0'  // Loca 版本，缺省 1.3.2
         },
     }).then((AMap)=>{
         map = new AMap.Map('container',{
@@ -70,11 +70,24 @@
         let data = JSON.parse(msg.data)
         //判断是否为上一次相同位置信息 减少图标闪烁
         if (!(x===data.positionX&&y===data.positionY)) {
+
+            //转换坐标
+            var gps = [data.positionX, data.positionY];
+            console.log("test")
+            AMap.convertFrom(gps, 'gps', function (status, result) {
+                if (result.info === 'ok') {
+                    var lnglats = result.locations; // Array.<LngLat>
+                    console.log("test")
+                    console.log(x+","+y)
+                }
+            });
             x = data.positionX
             y = data.positionY
+            // y = gps[1]
             //将信息放入在地图中
             f()
         }
+
     }
     function onerror() {
 

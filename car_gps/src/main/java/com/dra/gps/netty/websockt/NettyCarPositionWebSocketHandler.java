@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.dra.gps.redis.RedisUtil;
 import com.dra.pojo.gps.GpsLog;
 import com.dra.utils.FinalValueSet;
+import com.dra.utils.GPSMessage;
 import com.dra.utils.HeaderStringCheck;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -38,7 +39,7 @@ public class NettyCarPositionWebSocketHandler extends SimpleChannelInboundHandle
                 log.info("开始推送->"+channelHandlerContext.channel().remoteAddress());
                 channelHandlerContext.channel().eventLoop().scheduleAtFixedRate(() -> {
                             try {
-                                channelHandlerContext.channel().writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(redisUtil.getGpsLog(FinalValueSet.GPS, HeaderStringCheck.getWSHead(var1)))));
+                                channelHandlerContext.channel().writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(GPSMessage.dataWash(redisUtil.getGpsLog(FinalValueSet.GPS, HeaderStringCheck.getWSHead(var1))))));
                             } catch (Exception e) {
                                 log.error(e.getMessage());
                             }
